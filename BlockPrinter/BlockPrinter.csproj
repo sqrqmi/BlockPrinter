@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Tilte\GameMode.cs" />
     <Compile Include="Assets\Scripts\BreakedPolyominosDisplay.cs" />
+    <Compile Include="Assets\Scripts\GitHubTest.cs" />
     <Compile Include="Assets\Scripts\BlockAppearence.cs" />
     <Compile Include="Assets\Scripts\CandidateBlockDisplay.cs" />
     <Compile Include="Assets\Scripts\ScoreDisplay.cs" />

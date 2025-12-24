@@ -1,0 +1,16 @@
+{
+    "name": "BlockPrinter",
+    "rootNamespace": "BlockPrinter",
+    "references": [
+        "GUID:92d5bb0183f636748805b52fad3acc5d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

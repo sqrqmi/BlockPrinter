@@ -31,7 +31,7 @@ namespace BlockPrinter.UserInterface
         private void PrintDisplay(int printScore)
         {
             //テキストの中身をスコアにする
-            this.showText.UpdateText(printScore.ToString());
+            this.showText.UpdateText("Score:" + printScore.ToString());
         }
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created

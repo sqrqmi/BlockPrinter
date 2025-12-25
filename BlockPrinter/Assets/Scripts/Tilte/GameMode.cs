@@ -12,7 +12,7 @@ namespace BlockPrinter
     public class GameMode : MonoBehaviour
     {
         //static‚ÅplayerMode‚ğéŒ¾
-        public static PlayerMode playerMode;
+        public static PlayerMode playerMode = PlayerMode.Double;
 
         //ˆêlƒvƒŒƒC‚Éİ’è‚·‚é
         public void SetSingle()

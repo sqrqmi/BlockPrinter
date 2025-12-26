@@ -206,34 +206,51 @@ namespace BlockPrinter
         }
     }
 
-    //[Serializable]
-    //public struct CPUProperty
-    //{
-    //    public FieldSystem HandlingField;
+    [Serializable]
+    public struct CPUProperty
+    {
+        public FieldSystem HandlingField;
 
-    //    public struct Properties
-    //    {
-    //        public int MaxDepth;
-    //        public float ErrorFrequency;
-    //        public float ThinkingTime;
-    //        public float BaseControlSpan;
-    //        public float HispeedControlSpan;
-    //    }
-    //    public Properties Prop;
-    //    private float WaitTime;
+        public struct Properties
+        {
+            public int MaxDepth;
+            public float ErrorFrequency;
+            public float ThinkingTime;
+            public float BaseControlSpan;
+            public float HispeedControlSpan;
+        }
+        public Properties Prop;
+        private float WaitTime;
 
-    //    private Field2d<bool> 
+        //private Field2d<bool>
 
-    //    public static CPUProperty LevelOf(int Level)
-    //    {
+        private enum ControlPettern
+        {
+            Wait,
+            Left,
+            Right,
+        }
+        private ControlPettern[] ControlSequence;
 
-    //    }
+        public static CPUProperty LevelOf(int Level)
+        {
+            return new CPUProperty();
+        }
 
-    //    public void GetOutput()
-    //    {
+        public void GetOutput()
+        {
 
-    //    }
-    //}
+        }
+
+        private int EvalStatic()
+        {
+            return 0;
+        }
+        private int EvalDynamic()
+        {
+            return 0;
+        }
+    }
 
 
 

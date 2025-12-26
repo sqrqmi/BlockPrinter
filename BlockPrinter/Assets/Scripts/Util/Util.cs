@@ -75,6 +75,14 @@ namespace Util
             return Grid == null;
         }
 
+
+        public void Fill(T Source)
+        {
+            for(int i = 0; i < Grid.Length; i++)
+            {
+                Grid[i] = Source;
+            }
+        }
     }
 
     public static class Util
@@ -253,4 +261,77 @@ namespace Util
         }
     }
 
+    [Serializable]
+    public struct Transform2d
+    {
+        public static readonly Transform2d Identity = new Transform2d(Vector2Int.right, Vector2Int.up, Vector2Int.zero);
+        public Vector2Int x, y, o;
+
+        public Transform2d(Vector2Int x, Vector2Int y, Vector2Int o)
+        {
+            this.x = x;
+            this.y = y;
+            this.o = o;
+        }
+
+        public Vector2Int Transform(Vector2Int v)
+        {
+            return x * v.x + y * v.y + o;
+        }
+
+        public Bounds2d Transform(Bounds2d b)
+        {
+            Vector2Int tb = Transform(b.Bottom);
+            Vector2Int tt = Transform(b.Top);
+            return new Bounds2d(new Vector2Int(Mathf.Min(tb.x, tt.x), Mathf.Min(tb.y, tt.y)),
+                                new Vector2Int(Mathf.Max(tb.x, tt.x), Mathf.Max(tb.y, tt.y)));
+        }
+
+        public Transform2d Rotate()
+        {
+            return new Transform2d(y, -x, o);
+        }
+        public Transform2d Flip()
+        {
+            return new Transform2d(-x, y, o);
+        }
+
+    }
+
+    [Serializable]
+    public struct Bounds2d
+    {
+        public Vector2Int Bottom;
+        public Vector2Int Top;
+
+        public Bounds2d(Vector2Int bottom, Vector2Int top)
+        {
+            this.Bottom = bottom;
+            this.Top = top;
+        }
+
+        public Vector2Int CalcSize()
+        {
+            return Top - Bottom;
+        }
+
+        public static bool IsSimilar(in Bounds2d l, in Bounds2d r)
+        {
+            Vector2Int LSize = l.CalcSize();
+            Vector2Int RSize = r.CalcSize();
+            return LSize == RSize || (LSize.x == RSize.y && LSize.y == RSize.x);
+        }
+
+        public static Bounds2d BoundsOf(Vector2Int[] Points, int Count)
+        {
+            Vector2Int b = new Vector2Int(int.MaxValue, int.MaxValue);
+            Vector2Int t = new Vector2Int(int.MinValue, int.MinValue);
+            for(int i = 0; i < Count; i++)
+            {
+                b = new Vector2Int(Mathf.Min(Points[i].x, b.x), Mathf.Min(Points[i].y, b.y));
+                t = new Vector2Int(Mathf.Max(Points[i].x, t.x), Mathf.Max(Points[i].y, t.y));
+            }
+            return new Bounds2d(b, t);
+        }
+    }
 }

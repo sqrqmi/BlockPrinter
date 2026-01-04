@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Util;
 
 namespace BlockPrinter
 {
@@ -64,115 +65,8 @@ namespace BlockPrinter
 #endif
     #endregion
 
-    [Serializable]
-    public struct Transform2d
-    {
-        public static readonly Transform2d Identity = new Transform2d(Vector2Int.right, Vector2Int.up, Vector2Int.zero);
-        public Vector2Int x, y, o;
 
-        public Transform2d(Vector2Int x, Vector2Int y, Vector2Int o)
-        {
-            this.x = x;
-            this.y = y;
-            this.o = o;
-        }
 
-        public Vector2Int Transform(Vector2Int v)
-        {
-            return x * v.x + y * v.y + o;
-        }
-
-        public Bounds2d Transform(Bounds2d b)
-        {
-            Vector2Int tb = Transform(b.Bottom);
-            Vector2Int tt = Transform(b.Top);
-            return new Bounds2d(new Vector2Int(Mathf.Min(tb.x, tt.x), Mathf.Min(tb.y, tt.y)),
-                                new Vector2Int(Mathf.Max(tb.x, tt.x), Mathf.Max(tb.y, tt.y)));
-        }
-
-        public Transform2d Rotate()
-        {
-            return new Transform2d(y, -x, o);
-        }
-        public Transform2d Flip()
-        {
-            return new Transform2d(-x, y, o);
-        }
-
-    }
-
-    [Serializable]
-    public struct Bounds2d
-    {
-        public Vector2Int Bottom;
-        public Vector2Int Top;
-
-        public Bounds2d(Vector2Int bottom, Vector2Int top)
-        {
-            this.Bottom = bottom;
-            this.Top = top;
-        }
-
-        public Vector2Int CalcSize()
-        {
-            return Top - Bottom;
-        }
-
-        public static bool IsSimilar(in Bounds2d l, in Bounds2d r)
-        {
-            Vector2Int LSize = l.CalcSize();
-            Vector2Int RSize = r.CalcSize();
-            return LSize == RSize || (LSize.x == RSize.y && LSize.y == RSize.x);
-        }
-
-        public static Bounds2d BoundsOf(Vector2Int[] Points, int Count)
-        {
-            Vector2Int b = new Vector2Int(int.MaxValue, int.MaxValue);
-            Vector2Int t = new Vector2Int(int.MinValue, int.MinValue);
-            for (int i = 0; i < Count; i++)
-            {
-                b = new Vector2Int(Mathf.Min(Points[i].x, b.x), Mathf.Min(Points[i].y, b.y));
-                t = new Vector2Int(Mathf.Max(Points[i].x, t.x), Mathf.Max(Points[i].y, t.y));
-            }
-            return new Bounds2d(b, t);
-        }
-    }
-
-    [Serializable]
-    public struct Field2d<T>
-    {
-        public Vector2Int Size;
-        public T[] Array;
-
-        public Field2d(Vector2Int s)
-        {
-            Size = s;
-            Array = new T[s.x * s.y];
-        }
-
-        public ref T this[Vector2Int v]
-        {
-            get { return ref Array[Map(v)]; }
-        }
-
-        public int Map(Vector2Int v)
-        {
-            return v.y * Size.x + v.x;
-        }
-
-        public bool IsIn(Vector2Int v)
-        {
-            return 0 <= v.x && v.x < Size.x && 0 <= v.y && v.y < Size.y;
-        }
-
-        public void Fill(T Source)
-        {
-            for (int i = 0; i < Array.Length; i++)
-            {
-                Array[i] = Source;
-            }
-        }
-    }
 
     [Serializable]
     public struct FieldLayout
@@ -312,6 +206,52 @@ namespace BlockPrinter
         }
     }
 
+    [Serializable]
+    public struct CPUProperty
+    {
+        public FieldSystem HandlingField;
+
+        public struct Properties
+        {
+            public int MaxDepth;
+            public float ErrorFrequency;
+            public float ThinkingTime;
+            public float BaseControlSpan;
+            public float HispeedControlSpan;
+        }
+        public Properties Prop;
+        private float WaitTime;
+
+        //private Field2d<bool>
+
+        private enum ControlPettern
+        {
+            Wait,
+            Left,
+            Right,
+        }
+        private ControlPettern[] ControlSequence;
+
+        public static CPUProperty LevelOf(int Level)
+        {
+            return new CPUProperty();
+        }
+
+        public void GetOutput()
+        {
+
+        }
+
+        private int EvalStatic()
+        {
+            return 0;
+        }
+        private int EvalDynamic()
+        {
+            return 0;
+        }
+    }
+
 
 
     public class FieldSystem : MonoBehaviour
@@ -442,8 +382,11 @@ namespace BlockPrinter
 
         private void Tick()
         {
-            CurrentDamageRemainingTime -= Time.deltaTime;
-            DamageDisplay.UpdateRemainingTime(CurrentDamageRemainingTime);
+            if (CurrentDamagedBlockCount != 0)
+            {
+                CurrentDamageRemainingTime -= Time.deltaTime;
+                DamageDisplay.UpdateRemainingTime(CurrentDamageRemainingTime);
+            }
             if (IsBlockLanded())
             {
                 BlockFallWaitTime -= Time.deltaTime;
@@ -493,6 +436,11 @@ namespace BlockPrinter
                     CurrentDamagedBlockCount--;
                     DamagedBlocks[CurrentDamagedBlockCount] = BlockColor.None;
                     DamageDisplay.UpdateBlocks(DamagedBlocks);
+                    if (CurrentDamagedBlockCount == 0)
+                    {
+                        CurrentDamageRemainingTime = 0.0f;
+                        // DamageDisplay.SetRemainingTimeVisible(false);
+                    }
                 }
                 else
                 {
@@ -588,11 +536,12 @@ namespace BlockPrinter
                 for (int x = 0; x < FieldSize.x; x++)
                 {
                     Vector2Int Pos = new Vector2Int(x, y);
+                    BlockColor CheckColor = Field[Pos].Color;
                     if (_CheckedBlocks[Pos])
                     {
                         continue;
                     }
-                    if (Field[Pos].Color == BlockColor.None)
+                    if (CheckColor == BlockColor.None)
                     {
                         continue;
                     }
@@ -618,14 +567,15 @@ namespace BlockPrinter
                             }
                             if (!IsBreaked)
                             {
-                                if (IsPureChain)
+                                if (!IsPureChain)
                                 {
-                                    CurrentPureChain++;
+                                    CurrentPureChain = 0;
                                 }
+                                CurrentPureChain++;
                                 CurrentActiveChain++;
                             }
                             IsBreaked = true;
-                            EarnScore(CalcBlockBreakScore(Field[Pos].Color, CurrentPureChain, CurrentActiveChain));
+                            EarnScore(CalcBlockBreakScore(CheckColor, CurrentPureChain, CurrentActiveChain));
                             MarkPolyomino(pi);
                             BlockFallWaitForSeconds(CurrentUnitTime);
                             break;
@@ -924,13 +874,15 @@ namespace BlockPrinter
                 CurrentDamagedBlockCount += BlockSum;
             }
             DamageDisplay.UpdateBlocks(DamagedBlocks);
+            // DamageDisplay.SetRemainingTimeVisible(false);
+            DamageDisplay.UpdateRemainingTime(CurrentDamageRemainingTime);
         }
 
         public void DiscardInstances()
         {
-            if (Field.Array != null)
+            if (!Field.IsNull())
             {
-                foreach (BlockElement b in Field.Array)
+                foreach (BlockElement b in Field.Grid)
                 {
                     Destroy(b.Appearence.gameObject);
                 }

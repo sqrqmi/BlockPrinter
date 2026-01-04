@@ -75,6 +75,14 @@ namespace Util
             return Grid == null;
         }
 
+
+        public void Fill(T Source)
+        {
+            for (int i = 0; i < Grid.Length; i++)
+            {
+                Grid[i] = Source;
+            }
+        }
     }
 
     public static class Util
@@ -82,17 +90,17 @@ namespace Util
         public static Vector2Int ToVector2Int(Direction Dir)
         {
             Vector2Int Result = Vector2Int.zero;
-            if((Dir & Direction.Right) != Direction.None) { Result += Vector2Int.right; }
-            if((Dir & Direction.Up) != Direction.None) { Result += Vector2Int.up; }
-            if((Dir & Direction.Left) != Direction.None) { Result += Vector2Int.left; }
-            if((Dir & Direction.Down) != Direction.None) { Result += Vector2Int.down; }
+            if ((Dir & Direction.Right) != Direction.None) { Result += Vector2Int.right; }
+            if ((Dir & Direction.Up) != Direction.None) { Result += Vector2Int.up; }
+            if ((Dir & Direction.Left) != Direction.None) { Result += Vector2Int.left; }
+            if ((Dir & Direction.Down) != Direction.None) { Result += Vector2Int.down; }
             return Result;
         }
 
         public static Direction RotateDirection(Direction l, Direction r)
         {
             int Shift = 0;
-            switch(r)
+            switch (r)
             {
                 case Direction.Right: Shift = 0; break;
                 case Direction.Up: Shift = 1; break;
@@ -106,10 +114,10 @@ namespace Util
         public static Direction RelativeDirection(Vector2Int v)
         {
             Direction Dir = Direction.None;
-            if(v.x > 0) { Dir |= Direction.Right; }
-            if(v.x < 0) { Dir |= Direction.Left; }
-            if(v.y > 0) { Dir |= Direction.Up; }
-            if(v.y < 0) { Dir |= Direction.Down; }
+            if (v.x > 0) { Dir |= Direction.Right; }
+            if (v.x < 0) { Dir |= Direction.Left; }
+            if (v.y > 0) { Dir |= Direction.Up; }
+            if (v.y < 0) { Dir |= Direction.Down; }
             return Dir;
         }
 
@@ -141,7 +149,7 @@ namespace Util
 
         public static float ApplyInterpolation(InterpolationMode Mode, float t)
         {
-            switch(Mode)
+            switch (Mode)
             {
                 case InterpolationMode.Linear:
                     return t;
@@ -164,9 +172,9 @@ namespace Util
         public static int CountBit(int Flags)
         {
             int Sum = 0;
-            for(int i = 0; i < 32; i++)
+            for (int i = 0; i < 32; i++)
             {
-                if((Flags & (1 << i)) != 0)
+                if ((Flags & (1 << i)) != 0)
                 {
                     Sum++;
                 }
@@ -188,7 +196,7 @@ namespace Util
         public static Permutation Identity(int Size)
         {
             int[] NewMoveTo = new int[Size];
-            for(int i = 0; i < Size; i++)
+            for (int i = 0; i < Size; i++)
             {
                 NewMoveTo[i] = i;
             }
@@ -197,7 +205,7 @@ namespace Util
 
         public void Reset()
         {
-            for(int i = 0; i < MoveTo.Length; i++)
+            for (int i = 0; i < MoveTo.Length; i++)
             {
                 MoveTo[i] = i;
             }
@@ -222,9 +230,9 @@ namespace Util
         {
             int Result = 0;
             int Iteration = Mathf.Min(MoveTo.Length, 32);
-            for(int i = 0; i < Iteration; i++)
+            for (int i = 0; i < Iteration; i++)
             {
-                if((Flags & (1 << MoveTo[i])) != 0)
+                if ((Flags & (1 << MoveTo[i])) != 0)
                 {
                     Result |= 1 << i;
                 }
@@ -241,7 +249,7 @@ namespace Util
         public Vector2Int Origin;
         public Vector2Int Delta;
 
-        public Line(Vector2Int  Origin, Vector2Int Delta)
+        public Line(Vector2Int Origin, Vector2Int Delta)
         {
             this.Origin = Origin;
             this.Delta = Delta;
@@ -253,4 +261,77 @@ namespace Util
         }
     }
 
+    [Serializable]
+    public struct Transform2d
+    {
+        public static readonly Transform2d Identity = new Transform2d(Vector2Int.right, Vector2Int.up, Vector2Int.zero);
+        public Vector2Int x, y, o;
+
+        public Transform2d(Vector2Int x, Vector2Int y, Vector2Int o)
+        {
+            this.x = x;
+            this.y = y;
+            this.o = o;
+        }
+
+        public Vector2Int Transform(Vector2Int v)
+        {
+            return x * v.x + y * v.y + o;
+        }
+
+        public Bounds2d Transform(Bounds2d b)
+        {
+            Vector2Int tb = Transform(b.Bottom);
+            Vector2Int tt = Transform(b.Top);
+            return new Bounds2d(new Vector2Int(Mathf.Min(tb.x, tt.x), Mathf.Min(tb.y, tt.y)),
+                                new Vector2Int(Mathf.Max(tb.x, tt.x), Mathf.Max(tb.y, tt.y)));
+        }
+
+        public Transform2d Rotate()
+        {
+            return new Transform2d(y, -x, o);
+        }
+        public Transform2d Flip()
+        {
+            return new Transform2d(-x, y, o);
+        }
+
+    }
+
+    [Serializable]
+    public struct Bounds2d
+    {
+        public Vector2Int Bottom;
+        public Vector2Int Top;
+
+        public Bounds2d(Vector2Int bottom, Vector2Int top)
+        {
+            this.Bottom = bottom;
+            this.Top = top;
+        }
+
+        public Vector2Int CalcSize()
+        {
+            return Top - Bottom;
+        }
+
+        public static bool IsSimilar(in Bounds2d l, in Bounds2d r)
+        {
+            Vector2Int LSize = l.CalcSize();
+            Vector2Int RSize = r.CalcSize();
+            return LSize == RSize || (LSize.x == RSize.y && LSize.y == RSize.x);
+        }
+
+        public static Bounds2d BoundsOf(Vector2Int[] Points, int Count)
+        {
+            Vector2Int b = new Vector2Int(int.MaxValue, int.MaxValue);
+            Vector2Int t = new Vector2Int(int.MinValue, int.MinValue);
+            for (int i = 0; i < Count; i++)
+            {
+                b = new Vector2Int(Mathf.Min(Points[i].x, b.x), Mathf.Min(Points[i].y, b.y));
+                t = new Vector2Int(Mathf.Max(Points[i].x, t.x), Mathf.Max(Points[i].y, t.y));
+            }
+            return new Bounds2d(b, t);
+        }
+    }
 }

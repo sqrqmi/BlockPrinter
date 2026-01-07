@@ -498,6 +498,14 @@ PrefabInstance:
       propertyPath: KeyConfig.RightKey
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: Controller.PlayerKeyConfig.LeftKey
+      value: 97
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: Controller.PlayerKeyConfig.RightKey
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 6441565768672003126, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -667,6 +675,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: KeyConfig.RightKey
+      value: 275
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: Controller.PlayerKeyConfig.LeftKey
+      value: 276
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: Controller.PlayerKeyConfig.RightKey
       value: 275
       objectReference: {fileID: 0}
     - target: {fileID: 6441565768672003126, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}

@@ -1,3 +1,4 @@
+using BlockPrinter.Effect;
 using UnityEditor.Analytics;
 using UnityEngine;
 
@@ -19,6 +20,9 @@ namespace BlockPrinter
 
         //BlockのSpriteRendererを入れる(SerializeField : インスペクター上で表示される設定)
         [SerializeField] private SpriteRenderer sprite;
+
+        //Blockの破壊演出
+        [SerializeField] private GameObject BreakEffects;
 
         private float movingTime;
         private float moveDulation;
@@ -58,10 +62,9 @@ namespace BlockPrinter
         public void OnBreakBlock()
         {
             //演出ながす
+            var effects = Instantiate(this.BreakEffects);
 
-
-            //自身を削除する
-            //Destroy(gameObject);
+            effects.GetComponent<BreakEffect>().SetPosition(this.transform.position);
         }
 
         //ブロックの移動(引数StartPositionから引数NewPositionの位置に引数Dulationの時間後に移動)

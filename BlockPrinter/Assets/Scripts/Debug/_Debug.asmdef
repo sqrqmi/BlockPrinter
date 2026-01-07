@@ -1,0 +1,16 @@
+{
+    "name": "_Debug",
+    "rootNamespace": "BlockPrinter._Debug",
+    "references": [
+        "GUID:0850f58b5f06999448475d14b0894006"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

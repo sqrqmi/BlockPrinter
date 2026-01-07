@@ -73,8 +73,8 @@
     <Compile Include="Assets\Scripts\BattleModeMaster.cs" />
     <Compile Include="Assets\Scripts\Tilte\ButtonDown.cs" />
     <Compile Include="Assets\Scripts\PlayerCharacter.cs" />
-    <Compile Include="Assets\Scripts\PolyominoDisplay.cs" />
     <Compile Include="Assets\Scripts\Effect\BreakEffect.cs" />
+    <Compile Include="Assets\Scripts\PolyominoDisplay.cs" />
     <Compile Include="Assets\Scripts\CandidateBlock.cs" />
     <Compile Include="Assets\Scripts\BlockSkin.cs" />
     <Compile Include="Assets\Scripts\SinglePlayerMaster.cs" />

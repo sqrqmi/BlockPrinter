@@ -6,66 +6,6 @@ using Util;
 
 namespace BlockPrinter
 {
-    #region __DontCare
-#if !UNITY_EDITOR
-    public struct Vector2Int
-    {
-        public int x, y;
-
-        public Vector2Int(int x, int y)
-        {
-
-        }
-    }
-
-    public struct Vector3
-    {
-        public float x, y, z;
-
-        public Vector3(float x, float y, float z)
-        {
-
-        }
-
-        public Vector3(float x, float y)
-        {
-
-        }
-    }
-
-    public struct Color
-    {
-
-    }
-
-    public class SerializeFieldAttribute : Attribute
-    { }
-
-    [Serializable]
-    public enum BlockColor
-    {
-        None,
-        Red,
-        Blue,
-        Green,
-        Yellow,
-    }
-
-    public class Debug
-    {
-        public static void Log(string str) { }
-    }
-
-    public class Gizmos
-    {
-
-    }
-
-
-#endif
-    #endregion
-
-
 
 
     [Serializable]
@@ -97,7 +37,10 @@ namespace BlockPrinter
         {
             this.Appearence = Appearence;
             this.Color = Color;
-            Appearence.Initialize(Pos, Color);
+            if(Appearence != null )
+            {
+                Appearence.Initialize(Pos, Color);
+            }
         }
 
         public bool IsFilled()
@@ -108,7 +51,10 @@ namespace BlockPrinter
         public void SetBlock(BlockColor NewColor)
         {
             Color = NewColor;
-            Appearence.SetAppearence(Color);
+            if(Appearence != null)
+            {
+                Appearence.SetAppearence(Color);
+            }
         }
     }
 
@@ -191,64 +137,56 @@ namespace BlockPrinter
     }
 
     [Serializable]
-    public struct KeyConfig
+    public struct FieldControlInput
+    {
+        public static readonly FieldControlInput Neutral = new FieldControlInput();
+        public bool Left, Right;
+    }
+
+
+    [Serializable]
+    public struct FieldController
+    {
+        public enum UseMode
+        {
+            Player, 
+            CPU,
+        }
+        public UseMode Mode;
+        public KeyConfig PlayerKeyConfig;
+        public CPUProperty CPUConfig;
+
+        public void Initialize(FieldSystem Field)
+        {
+            CPUConfig = CPUProperty.LevelOf(1, Field);
+        }
+
+
+        public FieldControlInput GetInput()
+        {
+            switch (Mode)
+            {
+                case UseMode.Player: return PlayerKeyConfig.GetInput();
+                case UseMode.CPU: return CPUConfig.GetInput();
+            }
+            return FieldControlInput.Neutral;
+        }
+    }
+
+
+    [Serializable]
+    public struct KeyConfig 
     {
         public KeyCode LeftKey;
         public KeyCode RightKey;
 
-        public bool IsInputLeft()
+        public FieldControlInput GetInput()
         {
-            return Input.GetKeyDown(LeftKey);
-        }
-        public bool IsInputRight()
-        {
-            return Input.GetKeyDown(RightKey);
-        }
-    }
-
-    [Serializable]
-    public struct CPUProperty
-    {
-        public FieldSystem HandlingField;
-
-        public struct Properties
-        {
-            public int MaxDepth;
-            public float ErrorFrequency;
-            public float ThinkingTime;
-            public float BaseControlSpan;
-            public float HispeedControlSpan;
-        }
-        public Properties Prop;
-        private float WaitTime;
-
-        //private Field2d<bool>
-
-        private enum ControlPettern
-        {
-            Wait,
-            Left,
-            Right,
-        }
-        private ControlPettern[] ControlSequence;
-
-        public static CPUProperty LevelOf(int Level)
-        {
-            return new CPUProperty();
-        }
-
-        public void GetOutput()
-        {
-
-        }
-
-        private int EvalStatic()
-        {
-            return 0;
-        }
-        private int EvalDynamic()
-        {
-            return 0;
+            return new FieldControlInput() 
+            {
+                Left = Input.GetKeyDown(LeftKey), 
+                Right = Input.GetKeyDown(RightKey) 
+            };
         }
     }
 
@@ -275,7 +213,7 @@ namespace BlockPrinter
         private float CurrentUnitTime;
 
         [SerializeField] private PlayerCharacter Player;
-        [SerializeField] private KeyConfig KeyConfig;
+        [SerializeField] private FieldController Controller;
         private int HorizontalPosition;
 
         private BlockColor[] NextBlockColors;
@@ -296,9 +234,9 @@ namespace BlockPrinter
         private Action<int, int> OnSendAttackChargeCallback;
         private Action<int> OnGameOverCallback;
 
-        //[Header("Effects")]
-        //[SerializeField] private Effect.BlockBreak BlockBreakEffect;
-        //[SerializeField] private Effect....
+        [Header("Effects")]
+        // [SerializeField] private Effect.BlockBreakEffect BlockBreakEffect;
+        // [SerializeField] private Effect.GameOverEffect GameOverEffect;
 
         [Header("User Interfaces")]
         [SerializeField] private UserInterface.CandidateBlockDisplay CandidateBlockDisplay;
@@ -325,6 +263,7 @@ namespace BlockPrinter
             CurrentUnitTime = 0.5f;
             HorizontalPosition = FieldSize.x / 2;
             Player.Initialize(Layout.Transform(new Vector2Int(HorizontalPosition, FieldSize.y)));
+            Controller.Initialize(this);
             Field = new Field2d<BlockElement>(FieldSize);
             Field.Fill(BlockElement.Empty);
             for (int y = 0; y < FieldSize.y; y++)
@@ -356,6 +295,9 @@ namespace BlockPrinter
             {
                 CurrentErasedShapeFlags[i] = false;
             }
+
+            // BlockBreakEffect.Initialize(this, Layout);
+            // GameOverEffect.Iniitalize();
             BreakedPolyominosDisplay.Initialize(PolyominoDatabase.Tetriminos, BlockPrefab);
             AttackChargeDisplay.Initialize(BlockPrefab);
             DamageDisplay.Initialize(BlockPrefab);
@@ -395,12 +337,12 @@ namespace BlockPrinter
             {
                 BlockBreakWaitTime -= Time.deltaTime;
             }
-
-            if (KeyConfig.IsInputLeft())
+            FieldControlInput CurrentInput = Controller.GetInput();
+            if (CurrentInput.Left)
             {
                 TryPlaceBlock(-1);
             }
-            if (KeyConfig.IsInputRight())
+            if (CurrentInput.Right)
             {
                 TryPlaceBlock(+1);
             }
@@ -892,6 +834,18 @@ namespace BlockPrinter
         public bool IsGameOver()
         {
             return CurrentState == State.GameOver;
+        }
+
+        public void GetBlockField(ref Field2d<BlockColor> Destination)
+        {
+            for(int y = 0; y < Field.Size.y; y++)
+            {
+                for(int x = 0; x < Field.Size.x; x++)
+                {
+                    Vector2Int Pos = new Vector2Int(x, y);
+                    Destination[Pos] = Field[Pos].Color;
+                }
+            }
         }
     }
 

@@ -47,13 +47,18 @@ namespace Util
             switch (Direction)
             {
                 case FillDirection.Left:
+                    NewPosition = new Vector3((ContentSize - NewSize).x * -0.5f, 0.0f);
+                    break;
                 case FillDirection.Down:
-                    NewPosition = (NewSize - ContentSize) / 2.0f;
+                    NewPosition = new Vector3(0.0f, (ContentSize - NewSize).y * -0.5f);
                     break;
                 case FillDirection.Right:
-                case FillDirection.Up:
-                    NewPosition = NewSize / 2.0f;
+                    NewPosition = new Vector3((ContentSize - NewSize).x * +0.5f, 0.0f);
                     break;
+                case FillDirection.Up:
+                    NewPosition = new Vector3(0.0f, (ContentSize - NewSize).y * +0.5f);
+                    break;
+
             }
             Rend.size = NewSize;
             Rend.transform.localPosition = Rend.transform.localRotation * (Vector3)NewPosition;

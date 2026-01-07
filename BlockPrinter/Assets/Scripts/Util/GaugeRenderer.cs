@@ -47,16 +47,16 @@ namespace Util
             switch (Direction)
             {
                 case FillDirection.Left:
-                    NewPosition = new Vector3((ContentSize - NewSize).x * -0.5f, 0.0f);
-                    break;
-                case FillDirection.Down:
-                    NewPosition = new Vector3(0.0f, (ContentSize - NewSize).y * -0.5f);
-                    break;
-                case FillDirection.Right:
                     NewPosition = new Vector3((ContentSize - NewSize).x * +0.5f, 0.0f);
                     break;
-                case FillDirection.Up:
+                case FillDirection.Down:
                     NewPosition = new Vector3(0.0f, (ContentSize - NewSize).y * +0.5f);
+                    break;
+                case FillDirection.Right:
+                    NewPosition = new Vector3((ContentSize - NewSize).x * -0.5f, 0.0f);
+                    break;
+                case FillDirection.Up:
+                    NewPosition = new Vector3(0.0f, (ContentSize - NewSize).y * -0.5f);
                     break;
 
             }

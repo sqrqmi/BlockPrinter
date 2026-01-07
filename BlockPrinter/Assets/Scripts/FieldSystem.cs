@@ -158,7 +158,10 @@ namespace BlockPrinter
 
         public void Initialize(FieldSystem Field)
         {
-            CPUConfig = CPUProperty.LevelOf(1, Field);
+            if(Mode == UseMode.CPU)
+            {
+                CPUConfig = CPUProperty.LevelOf(1, Field);
+            }
         }
 
 
@@ -194,7 +197,7 @@ namespace BlockPrinter
 
     public class FieldSystem : MonoBehaviour
     {
-        private enum State
+        public enum State
         {
             Disable,
             Active,
@@ -301,7 +304,7 @@ namespace BlockPrinter
             BreakedPolyominosDisplay.Initialize(PolyominoDatabase.Tetriminos, BlockPrefab);
             AttackChargeDisplay.Initialize(BlockPrefab);
             DamageDisplay.Initialize(BlockPrefab);
-            CurrentState = State.Active;
+            CurrentState = State.Suspend;
         }
 
         public void Update()
@@ -662,6 +665,11 @@ namespace BlockPrinter
             }
 
             return false;
+        }
+
+        public void SetState(State NewState)
+        {
+            CurrentState = NewState;
         }
 
         public void GameOver()

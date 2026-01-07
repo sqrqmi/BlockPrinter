@@ -59,9 +59,13 @@ MonoBehaviour:
     Pivot: {x: 0, y: 0, z: 0}
   BlockPrefab: {fileID: 6837283636279308050, guid: ad4e7e22e4404e94ea0df1f2d4ac9bb2, type: 3}
   Player: {fileID: 2993762012796152033}
-  KeyConfig:
-    LeftKey: 0
-    RightKey: 0
+  Controller:
+    Mode: 0
+    PlayerKeyConfig:
+      LeftKey: 0
+      RightKey: 0
+    CPUConfig:
+      HandlingField: {fileID: 0}
   CandidateBlockDisplay: {fileID: 1214949396851220402}
   ScoreDisplay: {fileID: 3141929235768022869}
   BreakedPolyominosDisplay: {fileID: 9137978115200157294}

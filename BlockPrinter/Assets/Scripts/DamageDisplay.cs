@@ -50,7 +50,7 @@ namespace BlockPrinter.UserInterface
             for( int i = 0; i < generateCount; i++)
             {
                 this.DamageBlocks[i] = Instantiate(this.BlockPrefab);
-                this.DamageBlocks[i].transform.SetParent(this.RemainingBlocks.transform);
+                this.DamageBlocks[i].transform.SetParent(this.RemainingBlocks.transform);   
                 this.DamageBlocks[i].transform.localPosition = Vector3.zero;
                 this.DamageBlocks[i].OnMove(new Vector3(0, 1f, 0f), new Vector3(-1.5f, 0.25f * i, 0f), 1f);
                 this.DamageBlocks[i].transform.localScale = new Vector3(this.BlockScale, this.BlockScale, this.BlockScale);

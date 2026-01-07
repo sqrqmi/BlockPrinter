@@ -153,5 +153,5 @@ MonoBehaviour:
   IsInheritStyle: 0
   ContentSize: {x: 0.125, y: 5}
   Rend: {fileID: 2695534528692247915}
-  Direction: 3
+  Direction: 2
   AmountRatio: 1

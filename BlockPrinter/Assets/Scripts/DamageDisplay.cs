@@ -59,7 +59,10 @@ namespace BlockPrinter.UserInterface
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-        
+            if( GameMode.playerMode == PlayerMode.Single)
+            {
+                Destroy(gameObject);
+            }
         }
 
         // Update is called once per frame

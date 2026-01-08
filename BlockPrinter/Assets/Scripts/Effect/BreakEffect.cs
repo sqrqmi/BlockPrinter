@@ -1,55 +1,57 @@
 using UnityEngine;
-using Util;
 
-namespace BlockPrinter.Effect
+namespace BlockPrinter
 {
+    public enum EffectColor
+    {
+        None,
+        Red,
+        Orange,
+        Yellow,
+        Green,
+        SkyBlue,
+        Blue,
+        Purple,
+        Gray,
+        Brack
+    }
+
+
     public class BreakEffect : MonoBehaviour
     {
-        [SerializeField] GameObject Effect;
+        //Effectの色画像データ(EffectSkin)を入れる
+        [SerializeField] private EffectSkin skin;
 
-        private GameObject[] Effects;
+        //EffectのSpriteRendererを入れる(SerializeField : インスペクター上で表示される設定)
+        [SerializeField] private SpriteRenderer sprite;
 
-        //エフェクトの発射する数
-        [SerializeField] private int DirectionCount = 8;
 
-        private Vector3 Position = Vector3.zero;
-
-        public void SetPosition(Vector3 newPosition)
+        public void SetAppearence(EffectColor newColor)
         {
-            this.Position = newPosition;
+            //新しい画像指定
+            Sprite newSprite = null;
+
+            switch (newColor)
+            {
+                case EffectColor.None: newSprite = this.skin.None; break;
+                case EffectColor.Red: newSprite = this.skin.Red; break;
+                case EffectColor.Orange: newSprite = this.skin.Orange; break;
+                case EffectColor.Yellow: newSprite = this.skin.Yellow; break;
+                case EffectColor.Green: newSprite = this.skin.Green; break;
+                case EffectColor.SkyBlue: newSprite = this.skin.SkyBlue; break;
+                case EffectColor.Blue: newSprite = this.skin.Blue; break;
+                case EffectColor.Purple: newSprite = this.skin.Purple; break;
+                case EffectColor.Gray: newSprite = this.skin.Gray; break;
+                case EffectColor.Brack: newSprite = this.skin.Brack; break;
+            }
+
+            //自身の画像を変更する
+            this.sprite.sprite = newSprite;
         }
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        private void Start()
         {
-            this.Effects = new GameObject[DirectionCount];
-
-            for( int i = 0; i < this.DirectionCount; i++ )
-            {
-                this.Effects[i] = Instantiate(this.Effect);
-                this.Effects[i].transform.SetParent( this.transform );
-
-                float angle = 360f / (float)this.DirectionCount * i;
-                Vector3 toPos = new Vector3(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle), 0f);
-                toPos += this.Position;
-
-                Vector3 rotation = new Vector3(0f, 0f, angle - 90f);
-
-                this.Effects[i].transform.rotation = Quaternion.Euler( rotation );
-                this.Effects[i].GetComponent<LinearMovement>().From = this.Position;
-                this.Effects[i].GetComponent<LinearMovement>().To = toPos;
-            }
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            float moveTime = this.Effects[0].GetComponent<LinearMovement>().MoveTime;
-            float elapsedTime = this.Effects[0].GetComponent<LinearMovement>().ElapsedTime;
-            if ( moveTime < elapsedTime )
-            {
-                Destroy(gameObject);
-            }
+            SetAppearence(EffectColor.Yellow);
         }
     }
 }

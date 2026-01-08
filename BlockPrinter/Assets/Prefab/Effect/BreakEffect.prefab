@@ -97,6 +97,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2177840573916867096}
   - component: {fileID: 7063819687864916180}
+  - component: {fileID: 6450372370225116738}
   m_Layer: 0
   m_Name: BreakEffect
   m_TagString: Untagged
@@ -139,3 +140,17 @@ MonoBehaviour:
   IsActiveAnimation: 0
   From: {x: 0, y: 0, z: 0}
   To: {x: 0, y: 0, z: 0}
+--- !u!114 &6450372370225116738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7602736131714365062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b459d561e16572439a4200747dc03b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skin: {fileID: 11400000, guid: 7d5735e962f02a84cbdd4b4c4e68319b, type: 2}
+  sprite: {fileID: 4870261980393342035}

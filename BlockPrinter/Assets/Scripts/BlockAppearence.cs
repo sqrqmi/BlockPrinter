@@ -58,13 +58,23 @@ namespace BlockPrinter
             this.sprite.sprite = newSprite;
         }
 
-        //ブロックの破壊処理(破壊演出系)
+        //ブロックの破壊演出(ポリオミノの場合)
         public void OnBreakBlock()
         {
             //演出ながす
             var effects = Instantiate(this.BreakEffects);
 
-            effects.GetComponent<BreakEffect>().SetPosition(this.transform.position);
+            effects.GetComponent<BreakEffects>().SetPosition(this.transform.position);
+        }
+
+        //ブロックの破壊演出(5つ以上の塊になった場合の)
+        public void OnRecoverLargeChunk()
+        {
+            //演出ながす
+            var effects = Instantiate(this.BreakEffects);
+
+            effects.GetComponent<BreakEffects>().SetDirectionCount(16);
+            effects.GetComponent<BreakEffects>().SetPosition(this.transform.position);
         }
 
         //ブロックの移動(引数StartPositionから引数NewPositionの位置に引数Dulationの時間後に移動)

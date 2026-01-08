@@ -51,7 +51,7 @@ namespace BlockPrinter
 
         private void Start()
         {
-            SetAppearence(EffectColor.Yellow);
+            
         }
     }
 }

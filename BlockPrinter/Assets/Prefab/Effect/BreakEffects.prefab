@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34764430401a2c341b4af9c6713ff196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Effect: {fileID: 7602736131714365062, guid: 514802311096d7a4498634675b6d464c, type: 3}
+  Effect: {fileID: 6450372370225116738, guid: 514802311096d7a4498634675b6d464c, type: 3}
   DirectionCount: 8

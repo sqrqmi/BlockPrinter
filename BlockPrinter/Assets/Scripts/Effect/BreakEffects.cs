@@ -15,16 +15,16 @@ namespace BlockPrinter.Effect
 
         private Vector3 Position = Vector3.zero;
 
-        public void SetPosition(Vector3 newPosition)
+        private void SetPosition(Vector3 newPosition)
         {
             this.Position = newPosition;
         }
 
-        public void SetDirectionCount(int newDirectionCount)
+        private void SetDirectionCount(int newDirectionCount)
         {
             this.DirectionCount = newDirectionCount;
 
-            Initialize();
+            this.Effects = new BreakEffect[DirectionCount];
 
             for (int i = 0; i < this.DirectionCount; i++)
             {
@@ -34,7 +34,7 @@ namespace BlockPrinter.Effect
 
         }
 
-        public void SetAppearence(EffectColor NewColor)
+        private void SetAppearence(EffectColor NewColor)
         {
             for( int i = 0; i < Effects.Length; i++)
             {
@@ -60,11 +60,11 @@ namespace BlockPrinter.Effect
             }
         }
 
-        public void Initialize()
+        public void Initialize(int newDirectionCount, EffectColor newColor, Vector3 newPosition)
         {
-            this.Effects = new BreakEffect[DirectionCount];
-
-            Debug.Log("Effect Creating");
+            SetDirectionCount(newDirectionCount);
+            SetAppearence(newColor);
+            SetPosition(newPosition);
         }
 
         // Update is called once per frame

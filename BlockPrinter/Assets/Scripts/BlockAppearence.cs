@@ -64,9 +64,7 @@ namespace BlockPrinter
             //ââèoÇ»Ç™Ç∑
             var effects = Instantiate(this.BreakEffects);
 
-            effects.SetDirectionCount(8);
-            effects.SetAppearence(EffectColor.Yellow);
-            effects.SetPosition(this.transform.position);
+            effects.Initialize(8, EffectColor.Yellow, this.transform.position);
             effects.Run();
         }
 
@@ -76,9 +74,7 @@ namespace BlockPrinter
             //ââèoÇ»Ç™Ç∑
             var effects = Instantiate(this.BreakEffects);
 
-            effects.SetDirectionCount(16);
-            effects.SetAppearence(EffectColor.Red);
-            effects.SetPosition(this.transform.position);
+            effects.Initialize(16, EffectColor.Red, this.transform.position);
             effects.Run();
         }
 

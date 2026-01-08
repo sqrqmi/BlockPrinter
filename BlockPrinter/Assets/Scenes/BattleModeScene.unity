@@ -434,6 +434,7 @@ MonoBehaviour:
   FieldSystems:
   - {fileID: 1464626634}
   - {fileID: 2042100591}
+  ReadyWaitTime: 0
 --- !u!1001 &1464626633
 PrefabInstance:
   m_ObjectHideFlags: 0

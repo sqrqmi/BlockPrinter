@@ -14,7 +14,7 @@ namespace BlockPrinter
         public void Initialize(Vector3 InitPosition)
         {
             //プレイヤーを初期位置にセットする
-            transform.position = InitPosition;
+            OnMove(this.transform.position, InitPosition, 0f);
         }
 
         //プレイヤーの移動キャンセル(引数の位置に移動)

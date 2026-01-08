@@ -45,7 +45,9 @@ namespace BlockPrinter.UserInterface
 
         public void SetRemainingTimeVisible(bool visible)
         {
+            if (visible) { return; }
 
+            LimitGauge.SetLength(0f);
         }
 
         private void GenerateDamageBlock(int generateCount)

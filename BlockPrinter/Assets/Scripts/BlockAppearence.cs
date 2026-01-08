@@ -22,7 +22,7 @@ namespace BlockPrinter
         [SerializeField] private SpriteRenderer sprite;
 
         //Blockの破壊演出
-        [SerializeField] private GameObject BreakEffects;
+        [SerializeField] private BreakEffects BreakEffects;
 
         private float movingTime;
         private float moveDulation;
@@ -64,7 +64,10 @@ namespace BlockPrinter
             //演出ながす
             var effects = Instantiate(this.BreakEffects);
 
-            effects.GetComponent<BreakEffects>().SetPosition(this.transform.position);
+            effects.SetDirectionCount(8);
+            effects.SetAppearence(EffectColor.Yellow);
+            effects.SetPosition(this.transform.position);
+            effects.Run();
         }
 
         //ブロックの破壊演出(5つ以上の塊になった場合の)
@@ -73,8 +76,10 @@ namespace BlockPrinter
             //演出ながす
             var effects = Instantiate(this.BreakEffects);
 
-            effects.GetComponent<BreakEffects>().SetDirectionCount(16);
-            effects.GetComponent<BreakEffects>().SetPosition(this.transform.position);
+            effects.SetDirectionCount(16);
+            effects.SetAppearence(EffectColor.Red);
+            effects.SetPosition(this.transform.position);
+            effects.Run();
         }
 
         //ブロックの移動(引数StartPositionから引数NewPositionの位置に引数Dulationの時間後に移動)

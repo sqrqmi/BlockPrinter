@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using Util;
 
@@ -158,7 +159,10 @@ namespace BlockPrinter
 
         public void Initialize(FieldSystem Field)
         {
-            CPUConfig = CPUProperty.LevelOf(1, Field);
+            if(Mode == UseMode.CPU)
+            {
+                CPUConfig = CPUProperty.LevelOf(1, Field);
+            }
         }
 
 
@@ -194,7 +198,7 @@ namespace BlockPrinter
 
     public class FieldSystem : MonoBehaviour
     {
-        private enum State
+        public enum State
         {
             Disable,
             Active,
@@ -301,7 +305,7 @@ namespace BlockPrinter
             BreakedPolyominosDisplay.Initialize(PolyominoDatabase.Tetriminos, BlockPrefab);
             AttackChargeDisplay.Initialize(BlockPrefab);
             DamageDisplay.Initialize(BlockPrefab);
-            CurrentState = State.Active;
+            CurrentState = State.Suspend;
         }
 
         public void Update()
@@ -381,7 +385,7 @@ namespace BlockPrinter
                     if (CurrentDamagedBlockCount == 0)
                     {
                         CurrentDamageRemainingTime = 0.0f;
-                        // DamageDisplay.SetRemainingTimeVisible(false);
+                        DamageDisplay.SetRemainingTimeVisible(false);
                     }
                 }
                 else
@@ -473,6 +477,8 @@ namespace BlockPrinter
             }
             _CheckedBlocks.Fill(false);
             bool IsBreaked = false;
+            int BreakedPolyominoCount = 0;
+            int EarnedScoreLocalTotal = 0;
             for (int y = 0; y < FieldSize.y; y++)
             {
                 for (int x = 0; x < FieldSize.x; x++)
@@ -491,7 +497,7 @@ namespace BlockPrinter
                     for (int pi = 0; pi < PolyominoDatabase.Tetriminos.Length; pi++)
                     {
                         Vector2Int[] Polyomino = PolyominoDatabase.Tetriminos[pi];
-                        //if (CurrentErasedShapeFlags[pi])
+                        //if (DisallowPolyominoDuplication || CurrentErasedShapeFlags[pi])
                         //{
                         //    continue;
                         //}
@@ -517,15 +523,23 @@ namespace BlockPrinter
                                 CurrentActiveChain++;
                             }
                             IsBreaked = true;
-                            EarnScore(CalcBlockBreakScore(CheckColor, CurrentPureChain, CurrentActiveChain));
+                            BreakedPolyominoCount++;
+                            EarnedScoreLocalTotal += CalcBlockBreakScore(CheckColor, CurrentPureChain, CurrentActiveChain);
                             MarkPolyomino(pi);
-                            BlockFallWaitForSeconds(CurrentUnitTime);
+                            if (IsExistsFloatingBlock())
+                            {
+                                BlockFallWaitForSeconds(CurrentUnitTime);
+                            }
                             break;
 
                         }
                     }
 
                 }
+            }
+            if(BreakedPolyominoCount != 0)
+            {
+                EarnScore(EarnedScoreLocalTotal * BreakedPolyominoCount * BreakedPolyominoCount);
             }
             if (!IsBreaked)
             {
@@ -572,6 +586,26 @@ namespace BlockPrinter
                 }
             }
             return AdjacentsIndex;
+        }
+
+        public bool IsExistsFloatingBlock()
+        {
+            for(int x = 0; x < FieldSize.x; x++)
+            {
+                bool IsEmpty = false;
+                for(int y = 0; y < FieldSize.y; y++)
+                {
+                    if (Field[new Vector2Int(x, y)].Color == BlockColor.None)
+                    {
+                        IsEmpty = true;
+                    }
+                    else if(IsEmpty)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         public void ApplyGravity()
@@ -662,6 +696,11 @@ namespace BlockPrinter
             }
 
             return false;
+        }
+
+        public void SetState(State NewState)
+        {
+            CurrentState = NewState;
         }
 
         public void GameOver()
@@ -816,7 +855,7 @@ namespace BlockPrinter
                 CurrentDamagedBlockCount += BlockSum;
             }
             DamageDisplay.UpdateBlocks(DamagedBlocks);
-            // DamageDisplay.SetRemainingTimeVisible(false);
+            DamageDisplay.SetRemainingTimeVisible(true);
             DamageDisplay.UpdateRemainingTime(CurrentDamageRemainingTime);
         }
 
@@ -846,6 +885,11 @@ namespace BlockPrinter
                     Destination[Pos] = Field[Pos].Color;
                 }
             }
+        }
+
+        public static void SimulateStep(ref Field2d<BlockColor> Field, out int EarnedScore)
+        {
+            EarnedScore = 0;
         }
     }
 

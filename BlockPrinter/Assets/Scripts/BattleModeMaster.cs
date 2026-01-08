@@ -10,6 +10,8 @@ namespace BlockPrinter
     {
         [SerializeField] private FieldSystem[] FieldSystems;
 
+        [SerializeField] private float ReadyWaitTime;
+
         private void Start()
         {
             Initialize();
@@ -17,10 +19,22 @@ namespace BlockPrinter
 
         public void Initialize()
         {
-            for(int i = 0; i < FieldSystems.Length; i++)
+            StartCoroutine(InternalRoutine());
+            IEnumerator InternalRoutine()
             {
-                FieldSystems[i].Initialize(i, OnSendAttackCharge, OnGameOver);
-            }
+
+                for (int i = 0; i < FieldSystems.Length; i++)
+                {
+                    FieldSystems[i].Initialize(i, OnSendAttackCharge, OnGameOver);
+                }
+                yield return new WaitForSeconds(ReadyWaitTime);
+
+                for (int i = 0; i < FieldSystems.Length; i++)
+                {
+                    FieldSystems[i].SetState(FieldSystem.State.Active);
+                }
+                yield break;
+            };
         }
 
         public void OnSendAttackCharge(int FieldId, int AttackCharge)

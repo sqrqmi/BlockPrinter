@@ -83,6 +83,22 @@ namespace Util
                 Grid[i] = Source;
             }
         }
+
+        public static void Copy(ref Field2d<T> Destination, in Field2d<T> Source)
+        {
+            if(Destination.IsNull())
+            {
+                Destination = new Field2d<T>(Source.Size);
+            }
+            for(int y = 0; y < Source.Size.y; y++)
+            {
+                for(int x = 0;  x < Source.Size.x; x++)
+                {
+                    Vector2Int Pos = new Vector2Int(x, y);
+                    Destination[Pos] = Source[Pos];
+                }
+            }
+        }
     }
 
     public static class Util

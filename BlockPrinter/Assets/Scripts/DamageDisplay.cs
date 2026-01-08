@@ -43,6 +43,11 @@ namespace BlockPrinter.UserInterface
             LimitGauge.SetLength(percent);
         }
 
+        public void SetRemainingTimeVisible(bool visible)
+        {
+
+        }
+
         private void GenerateDamageBlock(int generateCount)
         {
             this.DamageBlocks = new BlockAppearence[generateCount];

@@ -52,6 +52,7 @@ namespace BlockPrinter
                 HispeedControlSpan = 0.2f,
             };
             Result.WaitTime = 0.0f;
+            Result.FieldBranches = new Field2d<BlockColor>[Result.Prop.MaxDepth];
             Result.CurrentProcessSequenceIndex = 0;
             return Result;
         }
@@ -100,19 +101,25 @@ namespace BlockPrinter
 
         private int EvalStatic(ref Field2d<BlockColor> Field)
         {
+            int Eval = 0;
+            int EstimatedScore = 0;
             for(int i = 0; i < Prop.MaxChainCheck; i++)
             {
-
+                //_Fall();
+                //_CheckBreak();
+                //_MayBeRecoverLargeChunk();
             }
-            return 0;
+            Eval += EstimatedScore;
+            return Eval;
         }
         private int EvalDynamic(int CurrentDepth)
         {
-            if(CurrentDepth >= Prop.MaxDepth)
+            if(CurrentDepth >= Prop.MaxDepth - 1)
             {
-                return EvalStatic(ref FieldBranches[CurrentDepth - 1]);
+                return EvalStatic(ref FieldBranches[CurrentDepth]);
             }
-            
+            Field2d<BlockColor>.Copy(ref FieldBranches[CurrentDepth + 1], FieldBranches[CurrentDepth]);
+            int WaitEval = EvalDynamic(CurrentDepth + 1);
             return 0;
         }
     }

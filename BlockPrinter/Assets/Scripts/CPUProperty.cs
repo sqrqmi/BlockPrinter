@@ -102,12 +102,14 @@ namespace BlockPrinter
         private int EvalStatic(ref Field2d<BlockColor> Field)
         {
             int Eval = 0;
+            int EstimatedScore = 0;
             for(int i = 0; i < Prop.MaxChainCheck; i++)
             {
                 //_Fall();
                 //_CheckBreak();
                 //_MayBeRecoverLargeChunk();
             }
+            Eval += EstimatedScore;
             return Eval;
         }
         private int EvalDynamic(int CurrentDepth)

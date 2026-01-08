@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using Util;
 
@@ -220,6 +221,7 @@ namespace BlockPrinter
         [SerializeField] private FieldController Controller;
         private int HorizontalPosition;
 
+        public const int NextBlockCount = 10;
         private BlockColor[] NextBlockColors;
         private float BlockBreakWaitTime;
         private float BlockFallWaitTime;
@@ -280,7 +282,7 @@ namespace BlockPrinter
                     Field[Pos].Initialize(NewBlock, WorldPos, BlockColor.None);
                 }
             }
-            NextBlockColors = new BlockColor[10];
+            NextBlockColors = new BlockColor[NextBlockCount];
             CandidateBlockDisplay.Initialize(NextBlockColors.Length);
             for (int i = 0; i < NextBlockColors.Length; i++)
             {
@@ -891,14 +893,17 @@ namespace BlockPrinter
                 }
             }
             Destination.DeadlineHeight = this.DeadlineHeight;
+            if(Destination.NextBlockColors == null)
+            {
+                Destination.NextBlockColors = new BlockColor[this.NextBlockColors.Length];
+            }
+            Array.Copy(this.NextBlockColors, Destination.NextBlockColors, Destination.NextBlockColors.Length);
             if (Destination.CurrentErasedShapeFlags == null)
             {
                 Destination.CurrentErasedShapeFlags = new bool[this.CurrentErasedShapeFlags.Length];
             }
-            for (int i = 0; i < CurrentErasedShapeFlags.Length; i++)
-            {
-                Destination.CurrentErasedShapeFlags[i] = this.CurrentErasedShapeFlags[i];
-            }
+            Array.Copy(this.CurrentErasedShapeFlags, Destination.CurrentErasedShapeFlags, Destination.CurrentErasedShapeFlags.Length);
+            Destination.HorizontalPosition = this.HorizontalPosition;
             Destination.IsPureChain = this.IsPureChain;
             Destination.CurrentPureChain = this.CurrentPureChain;
             Destination.CurrentActiveChain = this.CurrentActiveChain;
@@ -910,19 +915,27 @@ namespace BlockPrinter
         public Vector2Int FieldSize;
         public Field2d<BlockColor> Field;
         public int DeadlineHeight;
+        public BlockColor[] NextBlockColors;
         public bool[] CurrentErasedShapeFlags;
 
+        public int HorizontalPosition;
         public bool IsPureChain;
         public int CurrentPureChain;
         public int CurrentActiveChain;
         public int Score;
 
+        public bool TryBlockPlace(int Delta)
+        {
+            // TODO: Define
+            return true;
+        }
+
         public (int EarnedScore, bool IsChanged) SimulateStep()
         {
             Score = 0;
             bool IsChanged = false;
-            IsChanged = ApplyGravity();
-            IsChanged = CheckBlockBreak();
+            IsChanged |= ApplyGravity();
+            IsChanged |= CheckBlockBreak();
             return (Score, !IsChanged);
         }
 
@@ -1141,7 +1154,7 @@ namespace BlockPrinter
             {
                 for (int x = 0; x < Field.Size.x; x++)
                 {
-
+                    // TODO: Define Static Evaluation Code 
                 }
             }
             return Eval;

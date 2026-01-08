@@ -55,8 +55,6 @@ namespace BlockPrinter.Effect
                 this.Effects[i].transform.rotation = Quaternion.Euler(rotation);
                 this.Effects[i].GetComponent<LinearMovement>().From = this.Position;
                 this.Effects[i].GetComponent<LinearMovement>().To = toPos;
-
-                Debug.Log($"{i} Effect created");
             }
         }
 

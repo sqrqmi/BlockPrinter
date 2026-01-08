@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\ScoreDisplay.cs" />
     <Compile Include="Assets\Scripts\EffectSkin.cs" />
     <Compile Include="Assets\Scripts\FieldSystem.cs" />
+    <Compile Include="Assets\Scripts\Effect\RainbowEffects.cs" />
     <Compile Include="Assets\Scripts\CPUProperty.cs" />
     <Compile Include="Assets\Scripts\AttackChargeDisplay.cs" />
     <Compile Include="Assets\Scripts\DamageDisplay.cs" />

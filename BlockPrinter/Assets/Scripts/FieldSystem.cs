@@ -1,7 +1,7 @@
-﻿using System;
+﻿using BlockPrinter.UserInterface;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using Util;
 
@@ -38,7 +38,7 @@ namespace BlockPrinter
         {
             this.Appearence = Appearence;
             this.Color = Color;
-            if(Appearence != null )
+            if (Appearence != null)
             {
                 Appearence.Initialize(Pos, Color);
             }
@@ -52,7 +52,7 @@ namespace BlockPrinter
         public void SetBlock(BlockColor NewColor)
         {
             Color = NewColor;
-            if(Appearence != null)
+            if (Appearence != null)
             {
                 Appearence.SetAppearence(Color);
             }
@@ -150,7 +150,7 @@ namespace BlockPrinter
     {
         public enum UseMode
         {
-            Player, 
+            Player,
             CPU,
         }
         public UseMode Mode;
@@ -159,9 +159,9 @@ namespace BlockPrinter
 
         public void Initialize(FieldSystem Field)
         {
-            if(Mode == UseMode.CPU)
+            if (Mode == UseMode.CPU)
             {
-                CPUConfig = CPUProperty.LevelOf(1, Field);
+                CPUConfig = CPUProperty.LevelOf(CPUConfig.Prop.Level, Field);
             }
         }
 
@@ -179,17 +179,17 @@ namespace BlockPrinter
 
 
     [Serializable]
-    public struct KeyConfig 
+    public struct KeyConfig
     {
         public KeyCode LeftKey;
         public KeyCode RightKey;
 
         public FieldControlInput GetInput()
         {
-            return new FieldControlInput() 
+            return new FieldControlInput()
             {
-                Left = Input.GetKeyDown(LeftKey), 
-                Right = Input.GetKeyDown(RightKey) 
+                Left = Input.GetKeyDown(LeftKey),
+                Right = Input.GetKeyDown(RightKey)
             };
         }
     }
@@ -537,7 +537,7 @@ namespace BlockPrinter
 
                 }
             }
-            if(BreakedPolyominoCount != 0)
+            if (BreakedPolyominoCount != 0)
             {
                 EarnScore(EarnedScoreLocalTotal * BreakedPolyominoCount * BreakedPolyominoCount);
             }
@@ -590,16 +590,16 @@ namespace BlockPrinter
 
         public bool IsExistsFloatingBlock()
         {
-            for(int x = 0; x < FieldSize.x; x++)
+            for (int x = 0; x < FieldSize.x; x++)
             {
                 bool IsEmpty = false;
-                for(int y = 0; y < FieldSize.y; y++)
+                for (int y = 0; y < FieldSize.y; y++)
                 {
                     if (Field[new Vector2Int(x, y)].Color == BlockColor.None)
                     {
                         IsEmpty = true;
                     }
-                    else if(IsEmpty)
+                    else if (IsEmpty)
                     {
                         return true;
                     }
@@ -750,7 +750,7 @@ namespace BlockPrinter
             SendAttackCharge();
         }
 
-        public int CalcBlockBreakScore(BlockColor BreakedColor, int PureChain, int ActiveChain)
+        public static int CalcBlockBreakScore(BlockColor BreakedColor, int PureChain, int ActiveChain)
         {
             int ColorBonusMultiplier = 1;
             switch (BreakedColor)
@@ -875,23 +875,277 @@ namespace BlockPrinter
             return CurrentState == State.GameOver;
         }
 
-        public void GetBlockField(ref Field2d<BlockColor> Destination)
+        public void GetVirtualCurrent(ref VirtualFieldSystem Destination)
         {
-            for(int y = 0; y < Field.Size.y; y++)
+            Destination.FieldSize = this.FieldSize;
+            if (Destination.Field.IsNull())
             {
-                for(int x = 0; x < Field.Size.x; x++)
+                Destination.Field = new Field2d<BlockColor>(FieldSize);
+            }
+            for (int y = 0; y < Field.Size.y; y++)
+            {
+                for (int x = 0; x < Field.Size.x; x++)
                 {
                     Vector2Int Pos = new Vector2Int(x, y);
-                    Destination[Pos] = Field[Pos].Color;
+                    Destination.Field[Pos] = Field[Pos].Color;
+                }
+            }
+            Destination.DeadlineHeight = this.DeadlineHeight;
+            if (Destination.CurrentErasedShapeFlags == null)
+            {
+                Destination.CurrentErasedShapeFlags = new bool[this.CurrentErasedShapeFlags.Length];
+            }
+            for (int i = 0; i < CurrentErasedShapeFlags.Length; i++)
+            {
+                Destination.CurrentErasedShapeFlags[i] = this.CurrentErasedShapeFlags[i];
+            }
+            Destination.IsPureChain = this.IsPureChain;
+            Destination.CurrentPureChain = this.CurrentPureChain;
+            Destination.CurrentActiveChain = this.CurrentActiveChain;
+        }
+    }
+
+    public struct VirtualFieldSystem
+    {
+        public Vector2Int FieldSize;
+        public Field2d<BlockColor> Field;
+        public int DeadlineHeight;
+        public bool[] CurrentErasedShapeFlags;
+
+        public bool IsPureChain;
+        public int CurrentPureChain;
+        public int CurrentActiveChain;
+        public int Score;
+
+        public (int EarnedScore, bool IsChanged) SimulateStep()
+        {
+            Score = 0;
+            bool IsChanged = false;
+            IsChanged = ApplyGravity();
+            IsChanged = CheckBlockBreak();
+            return (Score, !IsChanged);
+        }
+
+        private Vector2Int[] _Adjacents;
+        private Field2d<bool> _CheckedBlocks;
+        public bool CheckBlockBreak()
+        {
+            if (_Adjacents == null || _Adjacents.Length != FieldSize.x * FieldSize.y)
+            {
+                _Adjacents = new Vector2Int[FieldSize.x * FieldSize.y];
+            }
+            if (_CheckedBlocks.Size != FieldSize)
+            {
+                _CheckedBlocks = new Field2d<bool>(FieldSize);
+            }
+            _CheckedBlocks.Fill(false);
+            bool IsBreaked = false;
+            int BreakedPolyominoCount = 0;
+            int EarnedScoreLocalTotal = 0;
+            for (int y = 0; y < FieldSize.y; y++)
+            {
+                for (int x = 0; x < FieldSize.x; x++)
+                {
+                    Vector2Int Pos = new Vector2Int(x, y);
+                    BlockColor CheckColor = Field[Pos];
+                    if (_CheckedBlocks[Pos])
+                    {
+                        continue;
+                    }
+                    if (CheckColor == BlockColor.None)
+                    {
+                        continue;
+                    }
+                    int AdjacentCount = SearchAdjacents(Pos);
+                    for (int pi = 0; pi < PolyominoDatabase.Tetriminos.Length; pi++)
+                    {
+                        Vector2Int[] Polyomino = PolyominoDatabase.Tetriminos[pi];
+                        //if (DisallowPolyominoDuplication || CurrentErasedShapeFlags[pi])
+                        //{
+                        //    continue;
+                        //}
+                        if (AdjacentCount != Polyomino.Length)
+                        {
+                            continue;
+                        }
+                        if (PolyominoDatabase.IsSimilar(_Adjacents, Polyomino, Polyomino.Length))
+                        {
+                            for (int bi = 0; bi < AdjacentCount; bi++)
+                            {
+                                Vector2Int v = _Adjacents[bi];
+                                Field[v] = BlockColor.None;
+                            }
+                            if (!IsBreaked)
+                            {
+                                if (!IsPureChain)
+                                {
+                                    CurrentPureChain = 0;
+                                }
+                                CurrentPureChain++;
+                                CurrentActiveChain++;
+                            }
+                            IsBreaked = true;
+                            BreakedPolyominoCount++;
+                            EarnedScoreLocalTotal += FieldSystem.CalcBlockBreakScore(CheckColor, CurrentPureChain, CurrentActiveChain);
+                            MarkPolyomino(pi);
+                            break;
+
+                        }
+                    }
+
+                }
+            }
+            if (BreakedPolyominoCount != 0)
+            {
+                Score += EarnedScoreLocalTotal * BreakedPolyominoCount * BreakedPolyominoCount;
+            }
+            if (!IsBreaked)
+            {
+                CurrentPureChain = 0;
+                CurrentActiveChain = 0;
+            }
+            IsPureChain = true;
+            return IsBreaked;
+        }
+
+        public bool ApplyGravity()
+        {
+            bool IsChanged = false;
+            for (int x = 0; x < FieldSize.x; x++)
+            {
+                int Bottom = 0;
+                for (int y = 0; y < FieldSize.y; y++)
+                {
+                    Vector2Int Pos = new Vector2Int(x, y);
+                    if (Field[Pos] != BlockColor.None)
+                    {
+                        if (y != Bottom)
+                        {
+                            Vector2Int BottomPos = new Vector2Int(x, Bottom);
+                            BlockColor temp = Field[Pos];
+                            Field[Pos] = Field[BottomPos];
+                            Field[BottomPos] = temp;
+                            IsChanged = true;
+                        }
+                        Bottom++;
+                    }
+                }
+            }
+            return IsChanged;
+        }
+
+        private int SearchAdjacents(Vector2Int Origin)
+        {
+            BlockColor Color = Field[Origin];
+            int AdjacentsIndex = 1;
+            _Adjacents[0] = Origin;
+            for (int i = 0; i < AdjacentsIndex; i++)
+            {
+                foreach (Vector2Int AdjDelta in PolyominoDatabase.AdjacentRelations)
+                {
+                    Vector2Int CheckPos = _Adjacents[i] + AdjDelta;
+                    if (!Field.IsIn(CheckPos))
+                    {
+                        continue;
+                    }
+                    if (Field[CheckPos] != Color)
+                    {
+                        continue;
+                    }
+                    bool IsDuplicate(in VirtualFieldSystem _this, Vector2Int Pos, int AdjacentsIndex)
+                    {
+                        for (int k = 0; k < AdjacentsIndex; k++)
+                        {
+                            if (_this._Adjacents[k] == Pos)
+                            {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                    if (IsDuplicate(this, CheckPos, AdjacentsIndex))
+                    {
+                        continue;
+                    }
+                    _Adjacents[AdjacentsIndex] = CheckPos;
+                    AdjacentsIndex++;
+                }
+            }
+            return AdjacentsIndex;
+        }
+
+        public void RecoverLargeChunks()
+        {
+            if (_Adjacents == null || _Adjacents.Length != FieldSize.x * FieldSize.y)
+            {
+                _Adjacents = new Vector2Int[FieldSize.x * FieldSize.y];
+            }
+            if (_CheckedBlocks.Size != FieldSize)
+            {
+                _CheckedBlocks = new Field2d<bool>(FieldSize);
+            }
+            _CheckedBlocks.Fill(false);
+            for (int y = 0; y < FieldSize.y; y++)
+            {
+                for (int x = 0; x < FieldSize.x; x++)
+                {
+                    Vector2Int Pos = new Vector2Int(x, y);
+                    if (_CheckedBlocks[Pos])
+                    {
+                        continue;
+                    }
+                    if (Field[Pos] == BlockColor.None)
+                    {
+                        continue;
+                    }
+                    int AdjacentCount = SearchAdjacents(Pos);
+                    if (AdjacentCount > 4)
+                    {
+                        for (int i = 0; i < AdjacentCount; i++)
+                        {
+                            Vector2Int DeletePos = _Adjacents[i];
+                            Field[DeletePos] = BlockColor.None;
+                        }
+                    }
                 }
             }
         }
 
-        public static void SimulateStep(ref Field2d<BlockColor> Field, out int EarnedScore)
+        public void MarkPolyomino(int Index)
         {
-            EarnedScore = 0;
+            CurrentErasedShapeFlags[Index] = true;
+            for (int i = 0; i < CurrentErasedShapeFlags.Length; i++)
+            {
+                if (!CurrentErasedShapeFlags[i])
+                {
+                    return;
+                }
+            }
+            EarnCreateAllPolyominoBonus();
+        }
+
+        public void EarnCreateAllPolyominoBonus()
+        {
+            for (int i = 0; i < CurrentErasedShapeFlags.Length; i++)
+            {
+                CurrentErasedShapeFlags[i] = false;
+            }
+            Score += 5;
+            RecoverLargeChunks();
+        }
+
+        public int EvalFieldCondition()
+        {
+            int Eval = 0;
+            for (int y = 0; y < Field.Size.y; y++)
+            {
+                for (int x = 0; x < Field.Size.x; x++)
+                {
+
+                }
+            }
+            return Eval;
         }
     }
-
 
 }

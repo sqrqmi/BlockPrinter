@@ -663,6 +663,7 @@ namespace BlockPrinter
                         for (int i = 0; i < AdjacentCount; i++)
                         {
                             Vector2Int DeletePos = _Adjacents[i];
+                            Field[DeletePos].Appearence.OnRecoverLargeChunk();
                             Field[DeletePos].SetBlock(BlockColor.None);
                         }
                     }
@@ -895,6 +896,15 @@ namespace BlockPrinter
             {
                 Destination.CurrentErasedShapeFlags = new bool[this.CurrentErasedShapeFlags.Length];
             }
+            Destination.HorizontalPosition = this.HorizontalPosition;
+            if(Destination.NextBlockCandidate == null)
+            {
+                Destination.NextBlockCandidate = new BlockColor[this.NextBlockColors.Length];
+            }
+            for(int i = 0; i < NextBlockColors.Length; i++)
+            {
+                Destination.NextBlockCandidate[i] = this.NextBlockColors[i];
+            }
             for (int i = 0; i < CurrentErasedShapeFlags.Length; i++)
             {
                 Destination.CurrentErasedShapeFlags[i] = this.CurrentErasedShapeFlags[i];
@@ -911,6 +921,8 @@ namespace BlockPrinter
         public Field2d<BlockColor> Field;
         public int DeadlineHeight;
         public bool[] CurrentErasedShapeFlags;
+        public int HorizontalPosition;
+        public BlockColor[] NextBlockCandidate;
 
         public bool IsPureChain;
         public int CurrentPureChain;
@@ -921,9 +933,62 @@ namespace BlockPrinter
         {
             Score = 0;
             bool IsChanged = false;
-            IsChanged = ApplyGravity();
-            IsChanged = CheckBlockBreak();
-            return (Score, !IsChanged);
+            IsChanged |= ApplyGravity();
+            IsChanged |= CheckBlockBreak();
+            return (Score, IsChanged);
+        }
+
+        public bool TryPlaceBlock(int HorizontalDelta)
+        {
+            int Column = Mathf.Clamp(HorizontalPosition + HorizontalDelta, 0, FieldSize.x - 1);
+            for(int y = FieldSize.y - 1; y >= 0; y--)
+            {
+                Vector2Int Pos = new Vector2Int(Column, y);
+                if(Field[Pos].IsFilled())
+                {
+                    continue;
+                }
+                bool IsPlacable = false;
+                if(!Field.IsIn(Pos + Vector2Int.down))
+                {
+                    IsPlacable = true;
+                }
+                else if(Field[Pos + Vector2Int.down].IsFilled())
+                {
+                    IsPlacable = true;
+                }
+                //foreach (Vector2Int AdjDelta in PolyominoDatabase.AdjacentRelations)
+                //{
+                //    Vector2Int CheckPos = Pos + AdjDelta;
+                //    if (!Field.IsIn(CheckPos))
+                //    {
+                //        continue;
+                //    }
+                //    if (Field[CheckPos].Color == Field[Pos].Color)
+                //    {
+                //        IsPlacable = true;
+                //        break;
+                //    }
+                //}
+                if(IsPlacable)
+                {
+                    Field[Pos] = NextBlockCandidate[0];
+                    HorizontalPosition = Column;
+                    AdvanceBlockCandidate();
+                    IsPureChain = false;
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
+        public void AdvanceBlockCandidate()
+        {
+            for(int i = 1; i < NextBlockCandidate.Length; i++)
+            {
+                NextBlockCandidate[i - 1] = NextBlockCandidate[i];
+            }
         }
 
         private Vector2Int[] _Adjacents;
@@ -1141,7 +1206,28 @@ namespace BlockPrinter
             {
                 for (int x = 0; x < Field.Size.x; x++)
                 {
-
+                    Vector2Int Pos = new Vector2Int(x, y);
+                    if(_CheckedBlocks[Pos])
+                    {
+                        continue;
+                    }
+                    if(Field[Pos] == BlockColor.None)
+                    {
+                        continue;
+                    }
+                    if(y >= DeadlineHeight)
+                    {
+                        Eval += -500;
+                    }
+                    int AdjacentCount = SearchAdjacents(Pos);
+                    if(AdjacentCount > 4)
+                    {
+                        Eval += AdjacentCount * -100;
+                    }
+                    else
+                    {
+                        Eval += AdjacentCount * AdjacentCount;
+                    }
                 }
             }
             return Eval;

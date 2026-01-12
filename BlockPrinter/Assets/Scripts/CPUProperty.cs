@@ -8,6 +8,8 @@ namespace BlockPrinter
     [Serializable]
     public struct CPUProperty
     {
+        private const int InvalidEval = -30000;
+
         public FieldSystem HandlingField;
 
         [Serializable]
@@ -83,7 +85,7 @@ namespace BlockPrinter
                 case State.Thinking:
                     {
                         HandlingField.GetVirtualCurrent(ref VirtualField);
-                        BestSequenceEval = -30000;
+                        BestSequenceEval = InvalidEval;
                         EvalDynamic(0);
                         CurrentProcessSequenceIndex = 0;
                         WaitTime += Prop.ThinkingTime;
@@ -115,6 +117,28 @@ namespace BlockPrinter
         {
             int Eval = 0;
             int EstimatedScore = 0;
+            for(int i = 0; i < TemporalSequence.Length; i++)
+            {
+                switch(TemporalSequence[i])
+                {
+                    case ControlPettern.Wait:
+                        break;
+                        case ControlPettern.Left:
+                        if(!VirtualField.TryPlaceBlock(-1))
+                        {
+                            return InvalidEval;
+                        }
+                        break;
+                        case ControlPettern.Right:
+                        if(!VirtualField.TryPlaceBlock(+1))
+                        {
+                            return InvalidEval;
+                        }
+                        break;
+                }
+            }
+
+
             for(int i = 0; i < Prop.MaxChainCheck; i++)
             {
                 (int EarnedScore, bool IsChanged) = VirtualField.SimulateStep();
@@ -134,6 +158,7 @@ namespace BlockPrinter
             {
                 return EvalStatic();
             }
+            int LocalMaxEval = InvalidEval;
             for(int i = 0; i < (int)ControlPettern.MaxCount; i++)
             {
                 TemporalSequence[CurrentDepth] = (ControlPettern)i;
@@ -151,8 +176,9 @@ namespace BlockPrinter
                     Array.Copy(TemporalSequence, ControlSequence, ControlSequence.Length);
                     BestSequenceEval = Eval;
                 }
+                LocalMaxEval = Mathf.Max(Eval, LocalMaxEval);
             }
-            return 0;
+            return LocalMaxEval;
         }
     }
 

@@ -171,7 +171,7 @@ namespace BlockPrinter
             switch (Mode)
             {
                 case UseMode.Player: return PlayerKeyConfig.GetInput();
-                case UseMode.CPU: return CPUConfig.GetInput();
+                case UseMode.CPU: CPUConfig.Tick(Time.deltaTime); return CPUConfig.GetInput();
             }
             return FieldControlInput.Neutral;
         }
@@ -539,7 +539,7 @@ namespace BlockPrinter
             }
             if (BreakedPolyominoCount != 0)
             {
-                EarnScore(EarnedScoreLocalTotal * BreakedPolyominoCount * BreakedPolyominoCount);
+                EarnScore(EarnedScoreLocalTotal * BreakedPolyominoCount);
             }
             if (!IsBreaked)
             {
@@ -944,16 +944,16 @@ namespace BlockPrinter
             for(int y = FieldSize.y - 1; y >= 0; y--)
             {
                 Vector2Int Pos = new Vector2Int(Column, y);
-                if(Field[Pos].IsFilled())
+                if(Field[Pos] != BlockColor.None)
                 {
-                    continue;
+                    return false;
                 }
                 bool IsPlacable = false;
                 if(!Field.IsIn(Pos + Vector2Int.down))
                 {
                     IsPlacable = true;
                 }
-                else if(Field[Pos + Vector2Int.down].IsFilled())
+                else if(Field[Pos + Vector2Int.down] != BlockColor.None)
                 {
                     IsPlacable = true;
                 }
@@ -1062,7 +1062,7 @@ namespace BlockPrinter
             }
             if (BreakedPolyominoCount != 0)
             {
-                Score += EarnedScoreLocalTotal * BreakedPolyominoCount * BreakedPolyominoCount;
+                Score += EarnedScoreLocalTotal * BreakedPolyominoCount;
             }
             if (!IsBreaked)
             {
@@ -1202,6 +1202,14 @@ namespace BlockPrinter
         public int EvalFieldCondition()
         {
             int Eval = 0;
+            int RemainShapeCount = 0;
+            for(int i = 0; i < CurrentErasedShapeFlags.Length;i++)
+            {
+                if(!CurrentErasedShapeFlags[i])
+                {
+                    RemainShapeCount++;
+                }
+            }
             for (int y = 0; y < Field.Size.y; y++)
             {
                 for (int x = 0; x < Field.Size.x; x++)
@@ -1217,12 +1225,12 @@ namespace BlockPrinter
                     }
                     if(y >= DeadlineHeight)
                     {
-                        Eval += -500;
+                        Eval += -50000;
                     }
                     int AdjacentCount = SearchAdjacents(Pos);
                     if(AdjacentCount > 4)
                     {
-                        Eval += AdjacentCount * -100;
+                        Eval += AdjacentCount * -1000 * RemainShapeCount;
                     }
                     else
                     {
@@ -1230,6 +1238,7 @@ namespace BlockPrinter
                     }
                 }
             }
+            Eval += RemainShapeCount * -50;
             return Eval;
         }
     }

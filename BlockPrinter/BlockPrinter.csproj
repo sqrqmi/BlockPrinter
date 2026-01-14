@@ -84,11 +84,17 @@
     <Compile Include="Assets\Scripts\CandidateBlock.cs" />
     <Compile Include="Assets\Scripts\Effect\BreakEffects.cs" />
     <Compile Include="Assets\Scripts\BlockSkin.cs" />
+    <Compile Include="Assets\Scripts\Effect\GameOverEffect.cs" />
     <Compile Include="Assets\Scripts\FieldController.cs" />
     <Compile Include="Assets\Scripts\SinglePlayerMaster.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_SETTINGS.cginc" />
+    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR.cginc" />
     <None Include="Assets\BlockPrinter.asmdef" />
+    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Prefabs\Texts\_Make your own text effect.txt" />
+    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_PASSES.cginc" />
+    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_URP.cginc" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

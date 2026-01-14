@@ -32,8 +32,8 @@ namespace BlockPrinter.UserInterface
         //ƒŠƒZƒbƒgˆ—
         public void DiscardInstances()
         {
+            this.BlockPrefab = null;
             DestroyAll();
-            Initialize(this.BlockPrefab);
         }
 
         public void UpdateBlocks(BlockColor[] blockColors)

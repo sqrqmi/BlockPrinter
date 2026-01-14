@@ -30,6 +30,12 @@ namespace BlockPrinter.UserInterface
             this.transform.localPosition = InitPosition;
         }
 
+        //リセット処理
+        public void DiscardInstances()
+        {
+            DestroyAll();
+        }
+
         //次のブロックの色を設定
         public void SetNextBlock(BlockColor[] NewColors)
         {
@@ -49,6 +55,14 @@ namespace BlockPrinter.UserInterface
                 this.candidateBlocks[i].transform.SetParent(this.transform, false);
                 this.candidateBlocks[i].transform.localPosition = Vector3.zero;
                 this.candidateBlocks[i].OnMove(new Vector3(-1f, 4.5f - 0.5f * i, 0f), 1f);
+            }
+        }
+
+        private void DestroyAll()
+        {
+            foreach (var block in this.candidateBlocks)
+            {
+                Destroy(block.gameObject);
             }
         }
 

@@ -28,16 +28,6 @@ namespace BlockPrinter
             this.startPosition = InitPosition;
         }
 
-        //リセット処理
-        public void DiscardInstances()
-        {
-            //ブロックの色をリセット
-            Sprite newSprite = this.skin.None;
-            this.sprite.sprite = newSprite;
-
-            Initialize();
-        }
-
 
         //次のブロックの色を設定
         public void SetNextColor(BlockColor NewColors)

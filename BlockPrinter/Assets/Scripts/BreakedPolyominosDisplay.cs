@@ -35,7 +35,8 @@ namespace BlockPrinter.UserInterface
         public void DiscardInstances()
         {
             DestroyAll();
-            Initialize(this.Polyominos, this.BlockPrefab);
+            this.BlockPrefab = null;
+            this.Polyominos = null;
         }
 
         public void SetVisible(int Index, bool IsVisible)

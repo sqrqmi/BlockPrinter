@@ -256,7 +256,7 @@ namespace BlockPrinter
             Score = 0;
             PlayTime = 0.0f;
             PlacedBlockCount = 0;
-            GameOverEffect.Iniitalize();
+            GameOverEffect.Initialize();
             BreakedPolyominosDisplay.Initialize(PolyominoDatabase.Tetriminos, BlockPrefab);
             AttackChargeDisplay.Initialize(BlockPrefab);
             DamageDisplay.Initialize(BlockPrefab);

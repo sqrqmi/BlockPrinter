@@ -76,6 +76,7 @@ MonoBehaviour:
         ThinkingTime: 0
         BaseControlSpan: 0
         HispeedControlSpan: 0
+  GameOverEffect: {fileID: 354596947752118497}
   CandidateBlockDisplay: {fileID: 1214949396851220402}
   ScoreDisplay: {fileID: 3141929235768022869}
   BreakedPolyominosDisplay: {fileID: 9137978115200157294}
@@ -630,6 +631,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14c355070d5834743ad59a71009d6003, type: 3}
+--- !u!114 &354596947752118497 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6970511545950014683, guid: 14c355070d5834743ad59a71009d6003, type: 3}
+  m_PrefabInstance: {fileID: 7230515295749661754}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0602b2cddc79fee4997946f30e25ae08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7782385793080281349 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 601061221700414783, guid: 14c355070d5834743ad59a71009d6003, type: 3}

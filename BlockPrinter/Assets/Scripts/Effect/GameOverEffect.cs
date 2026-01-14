@@ -23,7 +23,7 @@ namespace BlockPrinter.Effect
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            OnGameOver();
+
         }
 
         // Update is called once per frame

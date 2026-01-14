@@ -14,10 +14,19 @@ namespace BlockPrinter.UserInterface
         private int showScore = 0;
 
         //初期化処理
-        public void initialize(int InitialScore)
+        public void Initialize(int InitialScore)
         {
             //表示スコアを引数の値にする
             this.showScore = InitialScore;
+
+            //表示テキストを初期値にする
+            PrintDisplay(this.showScore);
+        }
+
+        //リセット処理
+        public void DiscardInstances()
+        {
+            Initialize(0);
         }
 
         //表示スコアを更新する（引数で送られてくるのは追加された後の値）

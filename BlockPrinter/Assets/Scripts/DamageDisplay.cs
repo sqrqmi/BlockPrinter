@@ -24,6 +24,16 @@ namespace BlockPrinter.UserInterface
             {
                 this.DamageBlocks[i].SetAppearence(BlockColor.None);
             }
+
+            UpdateRemainingTime(0f);
+            SetRemainingTimeVisible(false);
+        }
+
+        //ÉäÉZÉbÉgèàóù
+        public void DiscardInstances()
+        {
+            DestroyAll();
+            Initialize(this.BlockPrefab);
         }
 
         public void UpdateBlocks(BlockColor[] blockColors)
@@ -61,6 +71,14 @@ namespace BlockPrinter.UserInterface
                 this.DamageBlocks[i].transform.localPosition = Vector3.zero;
                 this.DamageBlocks[i].OnMove(new Vector3(0, 1f, 0f), new Vector3(-1.5f, 0.25f * i, 0f), 1f);
                 this.DamageBlocks[i].transform.localScale = new Vector3(this.BlockScale, this.BlockScale, this.BlockScale);
+            }
+        }
+
+        private void DestroyAll()
+        {
+            foreach (var block in this.DamageBlocks)
+            {
+                Destroy(block.gameObject);
             }
         }
 

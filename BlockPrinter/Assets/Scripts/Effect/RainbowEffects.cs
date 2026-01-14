@@ -10,14 +10,18 @@ namespace BlockPrinter.Effect
 
         private BreakEffect[] Effects;
 
-        [SerializeField] int MaxEffectsCount = 80;
+        //エフェクトの最大生成数(DirectionCount * 10 が自動的に設定される)
+        private int MaxEffectsCount = 80;
 
         //エフェクトの発射する数
         [SerializeField] private int DirectionCount = 8;
 
         private Vector3 Position = Vector3.zero;
 
+        //エフェクト(複合体)の生存時間
         [SerializeField] private float LifeTime = 3.0f;
+
+        //エフェクト(単体)の発射間隔
         [SerializeField] private float IntervalTime = 0.05f;
         private float time = 0.0f;
 

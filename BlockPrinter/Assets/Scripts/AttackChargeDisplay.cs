@@ -13,6 +13,14 @@ namespace BlockPrinter.UserInterface
         public void Initialize(BlockAppearence BlockPrefab)
         {
             this.BlockPrefab = BlockPrefab;
+
+            UpdateAttackCharge(0);
+        }
+
+        //ƒŠƒZƒbƒgˆ—
+        public void DiscardInstances()
+        {
+            Initialize(this.BlockPrefab);
         }
 
         public void UpdateAttackCharge(int Attack)

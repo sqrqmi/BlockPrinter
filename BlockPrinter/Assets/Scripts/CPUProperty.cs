@@ -102,6 +102,7 @@ namespace BlockPrinter
                     {
 
                         EvalDynamic(0);
+                            if(false)
                         {
                             System.Text.StringBuilder sb = new System.Text.StringBuilder();
                             sb.Append("CPU Update: ");

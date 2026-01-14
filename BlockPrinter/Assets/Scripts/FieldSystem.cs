@@ -194,7 +194,7 @@ namespace BlockPrinter
         private Action<int> OnGameOverCallback;
 
         [Header("Effects")]
-        // [SerializeField] private Effect.GameOverEffect GameOverEffect;
+        [SerializeField] private Effect.GameOverEffect GameOverEffect;
 
         [Header("User Interfaces")]
         [SerializeField] private UserInterface.CandidateBlockDisplay CandidateBlockDisplay;
@@ -244,6 +244,7 @@ namespace BlockPrinter
             BlockFallWaitTime = 0.0f;
             CurrentPureChain = 0;
             CurrentActiveChain = 0;
+            CurrentAttackCharge = 0;
             DamagedBlocks = new BlockColor[100];
             CurrentDamagedBlockCount = 0;
             CurrentDamageRemainingTime = 0.0f;
@@ -255,7 +256,7 @@ namespace BlockPrinter
             Score = 0;
             PlayTime = 0.0f;
             PlacedBlockCount = 0;
-            // GameOverEffect.Iniitalize();
+            GameOverEffect.Iniitalize();
             BreakedPolyominosDisplay.Initialize(PolyominoDatabase.Tetriminos, BlockPrefab);
             AttackChargeDisplay.Initialize(BlockPrefab);
             DamageDisplay.Initialize(BlockPrefab);
@@ -665,6 +666,7 @@ namespace BlockPrinter
         {
             Debug.Log("Game Over Called");
             CurrentState = State.GameOver;
+            GameOverEffect.OnGameOver();
             if (OnGameOverCallback != null)
             {
                 OnGameOverCallback(Identifier);

@@ -82,7 +82,7 @@ namespace BlockPrinter
                 StartCoroutine(InternalRoutine());
                 IEnumerator InternalRoutine()
                 {
-                    float WaitTime = 2.0f; 
+                    float WaitTime = 10.0f; 
                     while(WaitTime >= 0.0f)
                     {
                         if(Input.GetKeyDown(KeyCode.Return))
@@ -90,6 +90,10 @@ namespace BlockPrinter
                             CleanupSystems();
                             StartRound();
                             yield break;
+                        }
+                        else if(Input.GetKeyDown(KeyCode.Escape))
+                        {
+                            break;
                         }
                         WaitTime -= Time.deltaTime;
                         yield return null;

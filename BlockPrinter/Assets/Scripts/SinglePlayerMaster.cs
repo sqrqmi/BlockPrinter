@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -33,12 +34,16 @@ namespace BlockPrinter
 
         public void OnGameOver(int PlayerID)
         {
-            //ゲームオーバーになったら
-            if (fieldSystem.IsGameOver())
+            StartCoroutine(InternalRoutine());
+            IEnumerator InternalRoutine()
             {
-                //タイトルシーンに移動
+                recordDisplay.UpdateRecord(fieldSystem.GetLastRecord());
+                yield return new WaitForSeconds(3.0f);
                 SceneManager.LoadScene("TitleScene");
+                yield break;
             }
+
+
         }
     }
 }

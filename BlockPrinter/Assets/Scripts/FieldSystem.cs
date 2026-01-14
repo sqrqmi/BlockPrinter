@@ -1,5 +1,4 @@
-﻿using BlockPrinter.UserInterface;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +21,8 @@ namespace BlockPrinter
         {
             return AxisX * f.x + AxisY * f.y + Pivot;
         }
+
+
     }
 
 
@@ -137,64 +138,16 @@ namespace BlockPrinter
 
     }
 
-    [Serializable]
-    public struct FieldControlInput
+
+    public struct RecordInfo
     {
-        public static readonly FieldControlInput Neutral = new FieldControlInput();
-        public bool Left, Right;
+        public DateTime PlayDate;
+        public int Score;
+        public float PlayTime;
+        public int PlacedBlockCount;
+
+
     }
-
-
-    [Serializable]
-    public struct FieldController
-    {
-        public enum UseMode
-        {
-            Player,
-            CPU,
-        }
-        public UseMode Mode;
-        public KeyConfig PlayerKeyConfig;
-        public CPUProperty CPUConfig;
-
-        public void Initialize(FieldSystem Field)
-        {
-            if (Mode == UseMode.CPU)
-            {
-                CPUConfig = CPUProperty.LevelOf(CPUConfig.Prop.Level, Field);
-            }
-        }
-
-
-        public FieldControlInput GetInput()
-        {
-            switch (Mode)
-            {
-                case UseMode.Player: return PlayerKeyConfig.GetInput();
-                case UseMode.CPU: CPUConfig.Tick(Time.deltaTime); return CPUConfig.GetInput();
-            }
-            return FieldControlInput.Neutral;
-        }
-    }
-
-
-    [Serializable]
-    public struct KeyConfig
-    {
-        public KeyCode LeftKey;
-        public KeyCode RightKey;
-
-        public FieldControlInput GetInput()
-        {
-            return new FieldControlInput()
-            {
-                Left = Input.GetKeyDown(LeftKey),
-                Right = Input.GetKeyDown(RightKey)
-            };
-        }
-    }
-
-
 
     public class FieldSystem : MonoBehaviour
     {
@@ -234,12 +187,13 @@ namespace BlockPrinter
 
         private bool[] CurrentErasedShapeFlags;
         private int Score;
+        private float PlayTime;
+        private int PlacedBlockCount;
 
         private Action<int, int> OnSendAttackChargeCallback;
         private Action<int> OnGameOverCallback;
 
         [Header("Effects")]
-        // [SerializeField] private Effect.BlockBreakEffect BlockBreakEffect;
         // [SerializeField] private Effect.GameOverEffect GameOverEffect;
 
         [Header("User Interfaces")]
@@ -299,8 +253,9 @@ namespace BlockPrinter
             {
                 CurrentErasedShapeFlags[i] = false;
             }
-
-            // BlockBreakEffect.Initialize(this, Layout);
+            Score = 0;
+            PlayTime = 0.0f;
+            PlacedBlockCount = 0;
             // GameOverEffect.Iniitalize();
             BreakedPolyominosDisplay.Initialize(PolyominoDatabase.Tetriminos, BlockPrefab);
             AttackChargeDisplay.Initialize(BlockPrefab);
@@ -328,6 +283,7 @@ namespace BlockPrinter
 
         private void Tick()
         {
+            PlayTime += Time.deltaTime;
             if (CurrentDamagedBlockCount != 0)
             {
                 CurrentDamageRemainingTime -= Time.deltaTime;
@@ -443,6 +399,7 @@ namespace BlockPrinter
                     Field[Pos].SetBlock(NextBlockColors[0]);
                     Field[Pos].Appearence.OnMove(Layout.Transform(new Vector2Int(Column, FieldSize.y)), Layout.Transform(Pos), CurrentUnitTime);
                     UpdateCharacterPosition(Column);
+                    PlacedBlockCount++;
                     AdvanceBlockCandidate();
                     IsPureChain = false;
                     BlockBreakWaitForSeconds(CurrentUnitTime);
@@ -540,6 +497,7 @@ namespace BlockPrinter
             if (BreakedPolyominoCount != 0)
             {
                 EarnScore(EarnedScoreLocalTotal * BreakedPolyominoCount);
+                
             }
             if (!IsBreaked)
             {
@@ -825,6 +783,10 @@ namespace BlockPrinter
                 }
                 for (int i = 0; i < BlockSum; i++)
                 {
+                    if(CurrentDamagedBlockCount + i >= DamagedBlocks.Length)
+                    {
+                        break;
+                    }
                     BlockColor NextColor = BlockColor.None;
                     int Rand = UnityEngine.Random.Range(0, BlockSum - i);
                     if (Rand < YellowCount + GreenCount + BlueCount + RedCount)
@@ -858,6 +820,17 @@ namespace BlockPrinter
             DamageDisplay.UpdateBlocks(DamagedBlocks);
             DamageDisplay.SetRemainingTimeVisible(true);
             DamageDisplay.UpdateRemainingTime(CurrentDamageRemainingTime);
+        }
+
+        public RecordInfo GetLastRecord()
+        {
+            return new RecordInfo()
+            {
+                PlayDate = DateTime.Now,
+                Score = Score,
+                PlayTime = PlayTime,
+                PlacedBlockCount = PlacedBlockCount,
+            };
         }
 
         public void DiscardInstances()

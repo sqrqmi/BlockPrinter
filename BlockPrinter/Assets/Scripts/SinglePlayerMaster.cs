@@ -9,6 +9,8 @@ namespace BlockPrinter
         //フィールドシステム
         [SerializeField] private FieldSystem fieldSystem;
 
+        [SerializeField] private UserInterface.RecordDisplay recordDisplay;
+
         //一人プレイを開始する（FieldSystemを一つ初期化）
         public void Rungame()
         {

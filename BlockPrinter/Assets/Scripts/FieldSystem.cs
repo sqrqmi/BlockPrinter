@@ -232,7 +232,10 @@ namespace BlockPrinter
                     Vector3 WorldPos = Layout.Transform(new Vector2Int(x, y));
                     Field[Pos].Initialize(NewBlock, WorldPos, BlockColor.None);
                 }
-            }
+            }      
+            DamagedBlocks = new BlockColor[100];
+            CurrentDamagedBlockCount = 0;
+            CurrentDamageRemainingTime = 0.0f;
             NextBlockColors = new BlockColor[10];
             CandidateBlockDisplay.Initialize(NextBlockColors.Length);
             for (int i = 0; i < NextBlockColors.Length; i++)
@@ -245,9 +248,7 @@ namespace BlockPrinter
             CurrentPureChain = 0;
             CurrentActiveChain = 0;
             CurrentAttackCharge = 0;
-            DamagedBlocks = new BlockColor[100];
-            CurrentDamagedBlockCount = 0;
-            CurrentDamageRemainingTime = 0.0f;
+
             CurrentErasedShapeFlags = new bool[PolyominoDatabase.Tetriminos.Length];
             for (int i = 0; i < CurrentErasedShapeFlags.Length; i++)
             {

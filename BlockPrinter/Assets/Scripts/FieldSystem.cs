@@ -842,11 +842,11 @@ namespace BlockPrinter
                     Destroy(b.Appearence.gameObject);
                 }
             }
-            //CandidateBlockDisplay.DiscardInstances();
-            //ScoreDisplay.DiscardInstances();
-            //BreakedPolyominosDisplay.DiscardInstances();
-            //AttackChargeDisplay.DiscardInstances();
-            //DamageDisplay.DiscardInstances();
+            CandidateBlockDisplay.DiscardInstances();
+            ScoreDisplay.DiscardInstances();
+            BreakedPolyominosDisplay.DiscardInstances();
+            AttackChargeDisplay.DiscardInstances();
+            DamageDisplay.DiscardInstances();
         }
 
         public bool IsGameOver()

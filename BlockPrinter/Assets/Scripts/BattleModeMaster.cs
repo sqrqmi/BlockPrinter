@@ -78,7 +78,7 @@ namespace BlockPrinter
             if(RemainsCount <= 1)
             {
                 Debug.Log($"Winner: {LastFieldId}");
-                RoundSet(LastFieldId);
+                RoundEnd(LastFieldId);
                 StartCoroutine(InternalRoutine());
                 IEnumerator InternalRoutine()
                 {
@@ -87,6 +87,7 @@ namespace BlockPrinter
                     {
                         if(Input.GetKeyDown(KeyCode.Return))
                         {
+                            CleanupSystems();
                             StartRound();
                             yield break;
                         }
@@ -99,12 +100,20 @@ namespace BlockPrinter
             }
         }
 
-        public void RoundSet(int WinnerId)
+        public void RoundEnd(int WinnerId)
         {
             Wins[WinnerId]++;
             for(int i = 0; i < FieldSystems.Length; i++)
             {
                 FieldSystems[i].SetState(FieldSystem.State.Disable);
+            }
+        }
+
+        public void CleanupSystems()
+        {
+            for(int i = 0; i < FieldSystems.Length;i++)
+            {
+                FieldSystems[i].DiscardInstances();
             }
         }
 

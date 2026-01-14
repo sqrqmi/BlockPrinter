@@ -214,7 +214,6 @@ namespace BlockPrinter
 
         public void Initialize(int NewIdentifier, Action<int, int> OnSendAttackCharge, Action<int> OnGameOver)
         {
-            DiscardInstances();
             Identifier = NewIdentifier;
             this.OnSendAttackChargeCallback = OnSendAttackCharge;
             this.OnGameOverCallback = OnGameOver;

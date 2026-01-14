@@ -12,12 +12,26 @@ namespace BlockPrinter
 
         [SerializeField] private float ReadyWaitTime;
 
+
+
+        private int[] Wins;
+
         private void Start()
         {
             Initialize();
+            StartRound();
         }
 
         public void Initialize()
+        {
+            Wins = new int[FieldSystems.Length];
+            for(int i = 0; i < FieldSystems.Length; i++)
+            {
+                Wins[i] = 0;
+            }
+        }
+
+        public void StartRound()
         {
             StartCoroutine(InternalRoutine());
             IEnumerator InternalRoutine()
@@ -64,8 +78,40 @@ namespace BlockPrinter
             if(RemainsCount <= 1)
             {
                 Debug.Log($"Winner: {LastFieldId}");
-                UnityEngine.SceneManagement.SceneManager.LoadScene("TitleScene");
+                RoundSet(LastFieldId);
+                StartCoroutine(InternalRoutine());
+                IEnumerator InternalRoutine()
+                {
+                    float WaitTime = 2.0f; 
+                    while(WaitTime >= 0.0f)
+                    {
+                        if(Input.GetKeyDown(KeyCode.Return))
+                        {
+                            StartRound();
+                            yield break;
+                        }
+                        WaitTime -= Time.deltaTime;
+                        yield return null;
+                    }
+                    LeaveMode();
+                    yield break;
+                }
             }
+        }
+
+        public void RoundSet(int WinnerId)
+        {
+            Wins[WinnerId]++;
+            for(int i = 0; i < FieldSystems.Length; i++)
+            {
+                FieldSystems[i].SetState(FieldSystem.State.Disable);
+            }
+        }
+
+        public void LeaveMode()
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("TitleScene");
+
         }
     }
 }

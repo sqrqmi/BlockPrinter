@@ -49,7 +49,7 @@ namespace BlockPrinter.UserInterface
 
                 //ƒuƒƒbƒN‚ÌˆÚ“®(Œ©‚½–Ú)
                 Vector3 startPos = new Vector3(-1f, 4.5f - 0.5f * (i + 1), 0f);
-                Vector3 endPos = new Vector3(-1f, 4.5f - 0.5f * i, 0f);
+                Vector3 endPos = this.candidateBlocks[i].transform.localPosition;
                 this.candidateBlocks[i].MoveNextBlock(startPos, endPos);
             }
         }

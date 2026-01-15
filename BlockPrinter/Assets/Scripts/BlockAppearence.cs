@@ -127,6 +127,18 @@ namespace BlockPrinter
             Util.LinearMovement.Create(this.gameObject, StartPosition, EndPosition, 0.1f, InterpolationMode.Linear);
         }
 
+        //攻撃ブロックの移動(直線)
+        public void MoveBrakeAttack(Vector3 StartPosition, Vector3 EndPosition, float time)
+        {
+            Util.LinearMovement.Create(this.gameObject, StartPosition, EndPosition, time, InterpolationMode.QuadraticBrake);
+        }
+
+        //攻撃ブロックの移動(カーブ)
+        public void MoveSircleAttack(Vector3 StartPosition, Vector3 EndPosition, float time)
+        {
+
+        }
+
         void Start()
         {
             this.moveDulation = -1f;

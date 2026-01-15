@@ -1,6 +1,7 @@
 using BlockPrinter.Effect;
 using UnityEditor.Analytics;
 using UnityEngine;
+using Util;
 
 namespace BlockPrinter
 {
@@ -118,6 +119,12 @@ namespace BlockPrinter
 
             //セットした移動先を自身の位置にする
             this.transform.localPosition = newPosition;
+        }
+
+        //次のブロックの移動(見た目)
+        public void MoveNextBlock(Vector3 StartPosition, Vector3 EndPosition)
+        {
+            Util.LinearMovement.Create(this.gameObject, StartPosition, EndPosition, 0.1f, InterpolationMode.Linear);
         }
 
         void Start()

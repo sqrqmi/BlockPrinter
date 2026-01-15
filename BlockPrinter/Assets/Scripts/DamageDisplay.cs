@@ -66,7 +66,7 @@ namespace BlockPrinter.UserInterface
 
             float r = 3f;
 
-            for ( int i = 0; i < blockColors.Length; i++ )
+            for ( int i = 0; i < damagedSum; i++ )
             {
                 //ブロックの発射方向をランダムに指定
                 Vector3 start = Vector3.zero;

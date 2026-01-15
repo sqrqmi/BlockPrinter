@@ -818,10 +818,10 @@ namespace BlockPrinter
                     }
                 }
                 CurrentDamagedBlockCount += BlockSum;
+                DamageDisplay.UpComingDamageBlocks(DamagedBlocks, new int[] { RedCount, BlueCount, GreenCount, YellowCount });
             }
-            DamageDisplay.UpdateBlocks(DamagedBlocks);
-            DamageDisplay.SetRemainingTimeVisible(true);
             DamageDisplay.UpdateRemainingTime(CurrentDamageRemainingTime);
+            DamageDisplay.SetRemainingTimeVisible(true);
         }
 
         public RecordInfo GetLastRecord()

@@ -371,7 +371,7 @@ namespace BlockPrinter
                 Vector2Int Pos = new Vector2Int(Column, y);
                 if (Field[Pos].IsFilled())
                 {
-                    continue;
+                    return false;
                 }
                 bool IsPlacable = false;
                 if (!Field.IsIn(Pos + Vector2Int.down))

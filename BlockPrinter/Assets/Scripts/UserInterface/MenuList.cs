@@ -20,6 +20,7 @@ namespace BlockPrinter.UserInterface
         [SerializeField] private GameObject CursorPrefab;
         [SerializeField] private GameObject MenuPivot;
         [SerializeField] private FieldLayout AlignmentLayout;
+        [SerializeField] private Util.Direction SortDirection;
         [SerializeField] private MenuElement[] MenuElements;
 
         public GameObject CursorInstance;
@@ -29,8 +30,6 @@ namespace BlockPrinter.UserInterface
 
         private void Update()
         {
-            // if(Input.GetKeyDown())
-
 
             if(Input.GetKeyDown("Submit"))
             {

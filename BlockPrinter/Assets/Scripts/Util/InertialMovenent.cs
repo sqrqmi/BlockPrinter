@@ -9,11 +9,11 @@ namespace Util
         [SerializeField] private Vector3 From;
         [SerializeField] private Vector3 To;
         [SerializeField] private Vector3 InitialVelocity;
-        [SerializeField] private Vector3 FinalVelocity;
+        [SerializeField] private Vector3 Acceleration;
 
         public override void OnUpdate(float t)
         {
-            this.transform.localPosition = Vector3.Lerp(InitialVelocity, FinalVelocity, t) * (t * t * 0.5f) + From;
+            this.transform.localPosition = InitialVelocity * t + Acceleration * (t * t * 0.5f) + From;
         }
 
         public override void OnStartAnimation()
@@ -33,7 +33,7 @@ namespace Util
             NewMovement.MoveTime = Time;
             NewMovement.InitialVelocity = InitialVelocity;
             float VelocityScalar = Time * Time * 0.5f;
-            NewMovement.FinalVelocity = InitialVelocity + ((To - (From + InitialVelocity * VelocityScalar)) / VelocityScalar);
+            NewMovement.Acceleration = ((To - (From + InitialVelocity * Time)) / VelocityScalar);
             NewMovement.Mode = InterpolationMode.Linear;
             NewMovement.StartAnimation();
             return NewMovement;

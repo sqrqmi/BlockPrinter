@@ -28,6 +28,9 @@ namespace Util
 
         // x = e^(-1/t^2 + 1)
         Smooth,
+
+        // x = (sin(t) + 1) / 2
+        Sine,
     }
 
 
@@ -178,6 +181,9 @@ namespace Util
 
                 case InterpolationMode.Smooth:
                     return (Mathf.Exp(-1.0f / (t * t) + 1.0f));
+
+                case InterpolationMode.Sine:
+                    return (Mathf.Sin(t * (0.5f * Mathf.PI)) + 1.0f) * 0.5f;
             }
             return 0.0f;
         }

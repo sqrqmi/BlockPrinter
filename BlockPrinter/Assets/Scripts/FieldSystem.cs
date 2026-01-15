@@ -371,7 +371,7 @@ namespace BlockPrinter
                 Vector2Int Pos = new Vector2Int(Column, y);
                 if (Field[Pos].IsFilled())
                 {
-                    continue;
+                    return false;
                 }
                 bool IsPlacable = false;
                 if (!Field.IsIn(Pos + Vector2Int.down))
@@ -818,10 +818,10 @@ namespace BlockPrinter
                     }
                 }
                 CurrentDamagedBlockCount += BlockSum;
+                DamageDisplay.UpComingDamageBlocks(DamagedBlocks, new int[] { RedCount, BlueCount, GreenCount, YellowCount });
             }
-            DamageDisplay.UpdateBlocks(DamagedBlocks);
-            DamageDisplay.SetRemainingTimeVisible(true);
             DamageDisplay.UpdateRemainingTime(CurrentDamageRemainingTime);
+            DamageDisplay.SetRemainingTimeVisible(true);
         }
 
         public RecordInfo GetLastRecord()

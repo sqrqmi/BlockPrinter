@@ -227,11 +227,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.Mode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.CPUConfig.Prop.Level
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: Controller.PlayerKeyConfig.LeftKey
+      value: 276
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: Controller.PlayerKeyConfig.RightKey
+      value: 275
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -444,11 +452,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.Mode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.CPUConfig.Prop.Level
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: Controller.PlayerKeyConfig.LeftKey
+      value: 260
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: Controller.PlayerKeyConfig.RightKey
+      value: 262
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -524,11 +540,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.Mode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.CPUConfig.Prop.Level
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: Controller.PlayerKeyConfig.LeftKey
+      value: 97
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: Controller.PlayerKeyConfig.RightKey
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -604,11 +628,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.Mode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.CPUConfig.Prop.Level
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: Controller.PlayerKeyConfig.LeftKey
+      value: 115
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: Controller.PlayerKeyConfig.RightKey
+      value: 102
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

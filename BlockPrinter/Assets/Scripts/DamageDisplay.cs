@@ -40,7 +40,13 @@ namespace BlockPrinter.UserInterface
         {
             for (int i = 0; i < this.damageBlockCount; i++)
             {
+                //受けた攻撃のブロックを次の色に指定
                 this.DamageBlocks[i].SetAppearence(blockColors[i]);
+
+                //ブロックの移動(見た目)
+                Vector3 startPos = new Vector3(-1.5f, 0.25f * (i + 1), 0f);
+                Vector3 endPos = new Vector3(-1.5f, 0.25f * i, 0f);
+                this.DamageBlocks[i].MoveNextBlock(startPos, endPos);
             }
         }
 

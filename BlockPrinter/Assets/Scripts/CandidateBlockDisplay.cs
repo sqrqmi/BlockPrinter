@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using UnityEngine;
+using Util;
 
 namespace BlockPrinter.UserInterface
 {
@@ -43,7 +44,13 @@ namespace BlockPrinter.UserInterface
 
             for( int i = 0; i < this.BlockCount; ++i)
             {
+                //ブロックの色を次の色にする
                 this.candidateBlocks[i].SetNextColor(this.nextColors[i]);
+
+                //ブロックの移動(見た目)
+                Vector3 startPos = new Vector3(-1f, 4.5f - 0.5f * (i + 1), 0f);
+                Vector3 endPos = new Vector3(-1f, 4.5f - 0.5f * i, 0f);
+                this.candidateBlocks[i].MoveNextBlock(startPos, endPos);
             }
         }
 
@@ -54,7 +61,7 @@ namespace BlockPrinter.UserInterface
                 this.candidateBlocks[i] = Instantiate(candidateBlockPrefab);
                 this.candidateBlocks[i].transform.SetParent(this.transform, false);
                 this.candidateBlocks[i].transform.localPosition = Vector3.zero;
-                this.candidateBlocks[i].OnMove(new Vector3(-1f, 4.5f - 0.5f * i, 0f), 1f);
+                this.candidateBlocks[i].OnMove(new Vector3(-1f, 4.5f - 0.5f * i, 0f), 0.5f);
             }
         }
 

@@ -1,5 +1,7 @@
 using BlockPrinter.Effect;
+using Codice.CM.Common.Merge;
 using UnityEditor.Analytics;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using Util;
 
@@ -29,6 +31,10 @@ namespace BlockPrinter
         private float moveDulation;
         private Vector3 moveToPosition;
         private Vector3 startPosition;
+        [SerializeField] private Vector3 destroyPosition;
+        private float destroyDistance = 0.5f;
+        private bool isDestroy;
+        private BlockColor color;
 
         public void Initialize(Vector3 NewPosition, BlockColor NewColor)
         {
@@ -48,15 +54,20 @@ namespace BlockPrinter
 
             switch (NewColor)
             {
-                case BlockColor.None: newSprite = this.skin.None; break;
-                case BlockColor.Red: newSprite = this.skin.Red; break;
-                case BlockColor.Blue: newSprite = this.skin.Blue; break;
-                case BlockColor.Green: newSprite = this.skin.Green; break;
-                case BlockColor.Yellow: newSprite = this.skin.Yellow; break;
+                case BlockColor.None: newSprite = this.skin.None; color = BlockColor.None; break;
+                case BlockColor.Red: newSprite = this.skin.Red; color = BlockColor.Red; break;
+                case BlockColor.Blue: newSprite = this.skin.Blue; color = BlockColor.Blue; break;
+                case BlockColor.Green: newSprite = this.skin.Green; color = BlockColor.Green; break;
+                case BlockColor.Yellow: newSprite = this.skin.Yellow; color = BlockColor.Yellow; break;
             }
 
             //自身の画像を変更する
             this.sprite.sprite = newSprite;
+        }
+
+        public BlockColor GetAppearence()
+        {
+            return this.color;
         }
 
         //ブロックの破壊演出(ポリオミノの場合)
@@ -76,6 +87,16 @@ namespace BlockPrinter
             var effects = Instantiate(this.BreakEffects);
 
             effects.Initialize(16, EffectColor.Red, this.transform.position);
+            effects.Run();
+        }
+
+        //被ダメージ時の演出
+        private void OnDamagedBlock()
+        {
+            //演出ながす
+            var effects = Instantiate(this.BreakEffects);
+
+            effects.Initialize(6, EffectColor.Red, this.transform.position);
             effects.Run();
         }
 
@@ -130,13 +151,50 @@ namespace BlockPrinter
         //攻撃ブロックの移動(直線)
         public void MoveBrakeAttack(Vector3 StartPosition, Vector3 EndPosition, float time)
         {
-            Util.LinearMovement.Create(this.gameObject, StartPosition, EndPosition, time, InterpolationMode.QuadraticBrake);
+            Util.LinearMovement.Create(this.gameObject, StartPosition, EndPosition, time, InterpolationMode.QuadraticAccel);
         }
 
         //攻撃ブロックの移動(カーブ)
         public void MoveSircleAttack(Vector3 StartPosition, Vector3 EndPosition, float time)
         {
+            //X軸の補正
+            float xScale = 1.3f;
+            //カーブの強さ（Y軸）
+            float curveStrength = 1.4f;
 
+            Vector3 initialVelocity;
+            float dx = EndPosition.x - StartPosition.x;
+            dx *= xScale;
+            float dy = Mathf.Abs(dx) * curveStrength;
+
+            if( Random.Range(0f, 1f) < 0.5f) { dx *= -1; }
+
+            initialVelocity = new Vector3(dx / time, dx / time, 0f);
+
+            Util.InertialMovenent.CreateFromTime(this.gameObject, StartPosition, EndPosition, initialVelocity, time);
+
+            Vector3 systemPos = transform.parent.parent.parent.position;
+
+            this.destroyPosition = EndPosition + systemPos;
+            this.isDestroy = true;
+        }
+
+        private void DestroyBlock()
+        {
+            var anim = this.gameObject.GetComponent<Util.InertialMovenent>();
+
+            anim.StopAnimation();
+            SetAppearence(BlockColor.None);
+        }
+
+        private float GetEuclidean(Vector3 p1, Vector3 p2)
+        {
+            float dx = p1.x - p2.x;
+            float dy = p1.y - p2.y;
+            float dz = p1.z - p2.z;
+            float euclidean = dx * dx + dy * dy + dz * dz;
+
+            return Mathf.Sqrt(euclidean);
         }
 
         void Start()
@@ -147,7 +205,15 @@ namespace BlockPrinter
 
         // Update is called once per frame
         void Update()
-        {
+        {            
+            if( this.isDestroy)
+            {
+                if( GetEuclidean(this.transform.position, this.destroyPosition) < this.destroyDistance)
+                {
+                    OnDamagedBlock();
+                    DestroyBlock();
+                }
+            }
             //移動時間を増加
             this.movingTime += Time.deltaTime;
 
@@ -163,6 +229,7 @@ namespace BlockPrinter
 
             //移動する
             MoveToPosition(this.startPosition, this.moveToPosition, persent);
+
         }
     }
 }

@@ -493,7 +493,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.Mode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: KeyConfig.LeftKey
@@ -670,13 +670,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2707927093444493850, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3287121180123553407, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: m_Name
       value: System (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4065937161766500327, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Layout.Pivot.x
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: Controller.Mode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: KeyConfig.LeftKey
@@ -685,6 +697,10 @@ PrefabInstance:
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: KeyConfig.RightKey
       value: 275
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
+      propertyPath: Controller.CPUConfig.Prop.Level
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.PlayerKeyConfig.LeftKey

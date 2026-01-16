@@ -190,7 +190,7 @@ namespace BlockPrinter
         private float PlayTime;
         private int PlacedBlockCount;
 
-        private Action<int, int> OnSendAttackChargeCallback;
+        private Action<int, int, Vector3> OnSendAttackChargeCallback;
         private Action<int> OnGameOverCallback;
 
         [Header("Effects")]
@@ -212,7 +212,7 @@ namespace BlockPrinter
         }
 
 
-        public void Initialize(int NewIdentifier, Action<int, int> OnSendAttackCharge, Action<int> OnGameOver)
+        public void Initialize(int NewIdentifier, Action<int, int, Vector3> OnSendAttackCharge, Action<int> OnGameOver)
         {
             Identifier = NewIdentifier;
             this.OnSendAttackChargeCallback = OnSendAttackCharge;
@@ -759,13 +759,13 @@ namespace BlockPrinter
         {
             if (OnSendAttackChargeCallback != null)
             {
-                OnSendAttackChargeCallback(Identifier, CurrentAttackCharge);
+                OnSendAttackChargeCallback(Identifier, CurrentAttackCharge, this.transform.position);
             }
             CurrentAttackCharge = 0;
             AttackChargeDisplay.UpdateAttackCharge(CurrentAttackCharge);
         }
 
-        public void TakeDamage(int Damage)
+        public void TakeDamage(int Damage, Vector3 From)
         {
             int CurrentDamage = Damage;
             {
@@ -817,8 +817,8 @@ namespace BlockPrinter
                         case BlockColor.Yellow: YellowCount--; break;
                     }
                 }
+                DamageDisplay.UpComingDamagedBlocks(DamagedBlocks, From - this.transform.position, BlockSum);
                 CurrentDamagedBlockCount += BlockSum;
-                DamageDisplay.UpComingDamageBlocks(DamagedBlocks, new int[] { RedCount, BlueCount, GreenCount, YellowCount });
             }
             DamageDisplay.UpdateRemainingTime(CurrentDamageRemainingTime);
             DamageDisplay.SetRemainingTimeVisible(true);

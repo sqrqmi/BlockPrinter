@@ -52,6 +52,8 @@ MonoBehaviour:
   LimitTime: 10
   LimitGauge: {fileID: 5269806827700130207}
   RemainingBlocks: {fileID: 1378550195209653995}
+  DamageBlocks: []
+  DirectionBlocks: []
 --- !u!1 &1378550195209653995
 GameObject:
   m_ObjectHideFlags: 0

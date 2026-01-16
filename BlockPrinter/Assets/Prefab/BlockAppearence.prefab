@@ -48,6 +48,7 @@ MonoBehaviour:
   skin: {fileID: 11400000, guid: 0fa5393a27793ea4282724b3d9c48a51, type: 2}
   sprite: {fileID: 4491616687837011726}
   BreakEffects: {fileID: 9157951081678593366, guid: 05aab551c8b0d6b4f998f8084bb2f469, type: 3}
+  destroyPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &6759124481995524682
 GameObject:
   m_ObjectHideFlags: 0

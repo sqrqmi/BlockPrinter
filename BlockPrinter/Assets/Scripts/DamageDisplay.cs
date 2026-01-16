@@ -13,14 +13,18 @@ namespace BlockPrinter.UserInterface
         [SerializeField] private GaugeRenderer LimitGauge;
         [SerializeField] private GameObject RemainingBlocks;
         private BlockAppearence BlockPrefab;
-        private BlockAppearence[] DamageBlocks;
-        private float[] AttackEffectTimes = { 0.125f, 0.25f };
+        [SerializeField] private BlockAppearence[] DamageBlocks;    //ダメージ用
+        [SerializeField] private BlockAppearence[] DirectionBlocks;       //演出用
+        private BlockColor[] BlockColors;                           //追加攻撃検知用
+        private float[] AttackEffectTimes = { 0.5f, 0.75f };
+        private int AddedAttack = 0;
+        private bool GameOvered = false;
 
         public void Initialize(BlockAppearence BlockPrefab)
         {
             this.BlockPrefab = BlockPrefab;
 
-            GenerateDamageBlock(this.damageBlockCount);
+            GenerateDamageBlock(this.damageBlockCount, ref this.DamageBlocks);
 
             for( int i = 0; i < this.DamageBlocks.Length; i++ )
             {
@@ -34,13 +38,20 @@ namespace BlockPrinter.UserInterface
         //リセット処理
         public void DiscardInstances()
         {
+            DestroyAllDamageBlock();
+            DestroyAllDirectionBlock();
             this.BlockPrefab = null;
-            DestroyAll();
         }
 
         //ダメージブロックの更新
         public void UpdateBlocks(BlockColor[] blockColors)
         {
+            this.BlockColors = new BlockColor[blockColors.Length];
+            for( int i = 0; i < this.BlockColors.Length; i++ )
+            {
+                this.BlockColors[i] = blockColors[i];
+            }
+
             for (int i = 0; i < this.damageBlockCount; i++)
             {
                 //受けた攻撃のブロックを次の色に指定
@@ -54,30 +65,49 @@ namespace BlockPrinter.UserInterface
         }
 
         //ダメージを受けたときの処理
-        public void UpComingDamagedBlocks(BlockColor[] blockColors, int[] colors)
+        public void UpComingDamagedBlocks(BlockColor[] blockColors, Vector3 startPosition, int attackSum)
         {
             int damagedSum = 0;
-            for( int i = 0; i < colors.Length; i++ )
+            for( int i = 0; i < blockColors.Length; i++ )
             {
-                damagedSum += colors[i];
+                damagedSum++;
+                if (blockColors[i+1] == BlockColor.None)
+                {
+                    break;
+                }
+            }
+            Debug.Log($"Damaged Total Blocks {damagedSum} / Add Attacks {attackSum}");
+
+            this.AddedAttack = 0;
+            if( damagedSum != attackSum ){ AddedAttack = damagedSum - attackSum; }
+
+            DestroyAllDirectionBlock();
+            GenerateDamageBlock(damagedSum, ref this.DirectionBlocks);
+
+            for( int i = 0; i < damagedSum; i++)
+            {
+                this.DirectionBlocks[i].SetAppearence(BlockColor.None);
             }
 
-            this.DamageBlocks = new BlockAppearence[damagedSum];
+            float r = 5f;
 
-            float r = 3f;
-
-            for ( int i = 0; i < blockColors.Length; i++ )
+            for ( int i = AddedAttack; i < damagedSum; i++ )
             {
                 //ブロックの発射方向をランダムに指定
-                Vector3 start = Vector3.zero;
+                Vector3 start = startPosition;
                 float rad = Mathf.Deg2Rad * (Random.Range(0f, 360f));
-                Vector3 end = new Vector3(Mathf.Cos(rad) * r, Mathf.Sin(rad) * r, 0f);                
+                Vector3 end = new Vector3(Mathf.Cos(rad) * r, Mathf.Sin(rad) * r, 0f);
+                end += start;
 
-                this.DamageBlocks[i].MoveBrakeAttack(start, end, this.AttackEffectTimes[0]);
-
+                this.DirectionBlocks[i].Initialize(start, BlockColor.None);
                 //受けた攻撃のブロックの色を指定
-                this.DamageBlocks[i].SetAppearence(blockColors[i]);
+                this.DirectionBlocks[i].SetAppearence(blockColors[i]);
+
+                this.DirectionBlocks[i].MoveBrakeAttack(start, end, this.AttackEffectTimes[0]);
+
+                this.DirectionBlocks[i].transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             }
+            UpdateBlocks(blockColors);
 
             Invoke("StartAttackMovement", this.AttackEffectTimes[0]);
         }
@@ -85,16 +115,17 @@ namespace BlockPrinter.UserInterface
         //攻撃を受けた時のブロックの移動処理(後半)
         private void StartAttackMovement()
         {
-            for( int i = 0; i < this.DamageBlocks.Length; i++ )
+            for( int i = AddedAttack; i < this.DirectionBlocks.Length; i++ )
             {
-                Vector3 start = this.DamageBlocks[i].transform.position;
-                Vector3 end;
+                Vector3 start = this.DirectionBlocks[i].transform.position;
+                Vector3 end = Vector3.zero;
 
-                if (i < 6){ end = new Vector3(-1.5f, 0.25f * i, 0f); }
-                else{ end = new Vector3(-1.5f, 0.25f * 6, 0f); }
+                //if (i < 6){ end = new Vector3(-1.5f, 0.25f * i, 0f); }
+                //else{ end = new Vector3(-1.5f, 0.25f * 6, 0f); }
 
-                this.DamageBlocks[i].MoveSircleAttack(start, end, this.AttackEffectTimes[1]);
+                this.DirectionBlocks[i].MoveSircleAttack(start, end, this.AttackEffectTimes[1]);
             }
+            if( GameOvered ) { Invoke("OnGameOver", this.AttackEffectTimes[1]); }
         }
 
         public void UpdateRemainingTime(float second)
@@ -113,25 +144,48 @@ namespace BlockPrinter.UserInterface
             LimitGauge.SetLength(0f);
         }
 
-        private void GenerateDamageBlock(int generateCount)
+        private void GenerateDamageBlock(int generateCount, ref BlockAppearence[] blocks)
         {
-            this.DamageBlocks = new BlockAppearence[generateCount];
+            blocks = new BlockAppearence[generateCount];
 
             for( int i = 0; i < generateCount; i++)
             {
-                this.DamageBlocks[i] = Instantiate(this.BlockPrefab);
-                this.DamageBlocks[i].transform.SetParent(this.RemainingBlocks.transform);   
-                this.DamageBlocks[i].transform.localPosition = Vector3.zero;
-                this.DamageBlocks[i].OnMove(new Vector3(0, 1f, 0f), new Vector3(-1.5f, 0.25f * i, 0f), 1f);
-                this.DamageBlocks[i].transform.localScale = new Vector3(this.BlockScale, this.BlockScale, this.BlockScale);
+                blocks[i] = Instantiate(this.BlockPrefab);
+                blocks[i].transform.SetParent(this.RemainingBlocks.transform);   
+                blocks[i].transform.localPosition = Vector3.zero;
+                blocks[i].OnMove(new Vector3(0, 1f, 0f), new Vector3(-1.5f, 0.25f * i, 0f), 1f);
+                blocks[i].transform.localScale = new Vector3(this.BlockScale, this.BlockScale, this.BlockScale);
             }
         }
 
-        private void DestroyAll()
+        private void DestroyDamageBlock(int destroyCount, ref BlockAppearence[] blocks)
+        {
+            for( int i = 0; i < destroyCount; i++)
+            {
+                blocks[i].SetAppearence(BlockColor.None);
+            }       
+        }
+
+
+        private void DestroyAllDamageBlock()
         {
             foreach (var block in this.DamageBlocks)
             {
-                Destroy(block.gameObject);
+                if (block != null)
+                {
+                    Destroy(block.gameObject);
+                }
+            }
+        }
+
+        private void DestroyAllDirectionBlock()
+        {
+            foreach (var block in this.DirectionBlocks)
+            {
+                if (block != null)
+                {
+                    Destroy(block.gameObject);
+                }
             }
         }
 
@@ -147,7 +201,7 @@ namespace BlockPrinter.UserInterface
         // Update is called once per frame
         void Update()
         {
-        
+
         }
     }
 }

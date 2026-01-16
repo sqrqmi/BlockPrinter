@@ -39,6 +39,9 @@ namespace Util
             return NewMovement;
         }
 
-
+        public void StopAnimation()
+        {
+            this.enabled = false;
+        }
     }
 }

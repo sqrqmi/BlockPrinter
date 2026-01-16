@@ -227,11 +227,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.Mode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.CPUConfig.Prop.Level
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.PlayerKeyConfig.LeftKey
@@ -452,11 +452,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.Mode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.CPUConfig.Prop.Level
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.PlayerKeyConfig.LeftKey
@@ -544,7 +544,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.CPUConfig.Prop.Level
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.PlayerKeyConfig.LeftKey
@@ -628,11 +628,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.Mode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.CPUConfig.Prop.Level
-      value: 2
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4764077887828252419, guid: 60539b0aee9f17f4b9248d2ab3b684cd, type: 3}
       propertyPath: Controller.PlayerKeyConfig.LeftKey

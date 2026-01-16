@@ -51,7 +51,7 @@ namespace BlockPrinter
             };
         }
 
-        public void OnSendAttackCharge(int FieldId, int AttackCharge)
+        public void OnSendAttackCharge(int FieldId, int AttackCharge, Vector3 From)
         {
             for(int i = 0; i < FieldSystems.Length;i++)
             {
@@ -59,7 +59,7 @@ namespace BlockPrinter
                 {
                     continue;
                 }
-                FieldSystems[i].TakeDamage(AttackCharge);
+                FieldSystems[i].TakeDamage(AttackCharge, From);
             }
         }
 

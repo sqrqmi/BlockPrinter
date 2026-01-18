@@ -7,12 +7,13 @@ namespace BlockPrinter.UserInterface
     public struct MenuElement
     {
         public string Label;
-        public Action OnSelect;
+        public GameObject EventHandlerObject;
+        public string OnSelectMethodName;
     }
 
     public class MenuList : MonoBehaviour
     {
-        public static MenuList BaseInstance;
+        public static MenuList RootInstance;
 
         private MenuList SuperListInstance;
 
@@ -22,16 +23,32 @@ namespace BlockPrinter.UserInterface
         [SerializeField] private FieldLayout AlignmentLayout;
         [SerializeField] private Util.Direction SortDirection;
         [SerializeField] private MenuElement[] MenuElements;
+        [SerializeField] private bool AllowCancel;
 
-        public GameObject CursorInstance;
+        private GameObject CursorInstance;
         private MenuElementView[] MenuElementViewInstances;
         private int CurrentSelectingIndex;
         private bool IsActive;
 
         private void Update()
         {
-
-            if(Input.GetKeyDown("Submit"))
+            if(!IsActive)
+            {
+                return;
+            }
+            if(Input.GetAxis("Vertical") < -0.5f)
+            {
+                ChangeSelection(CurrentSelectingIndex + 1);
+            }
+            if(Input.GetAxis("Vertical") > +0.5f)
+            {
+                ChangeSelection(CurrentSelectingIndex - 1);
+            }
+            if(AllowCancel && Input.GetKeyDown(KeyCode.Escape))
+            {
+                ReturnToSuperList();
+            }
+            if(Input.GetKeyDown(KeyCode.Return))
             {
                 Submit();
                 ReturnToSuperList();
@@ -44,7 +61,7 @@ namespace BlockPrinter.UserInterface
         {
             if(SuperList == null)
             {
-                BaseInstance = this;
+                RootInstance = this;
             }
             SuperListInstance = SuperList;  
             MenuElementViewInstances = new MenuElementView[MenuElements.Length];
@@ -57,6 +74,7 @@ namespace BlockPrinter.UserInterface
                 MenuElementViewInstances[i] = NewView;
             }
             CursorInstance = Instantiate(CursorPrefab);
+            CursorInstance.transform.SetParent(MenuPivot.transform);
             CurrentSelectingIndex = 0;
             ChangeSelection(0);
             IsActive = true;
@@ -88,6 +106,10 @@ namespace BlockPrinter.UserInterface
 
         public void ChangeSelection(int NewIndex)
         {
+            if(NewIndex < 0 || MenuElements.Length <= NewIndex)
+            {
+                return;
+            }
             MenuElementViewInstances[CurrentSelectingIndex].OnSelectionChange(false);
             CurrentSelectingIndex = NewIndex;
             MenuElementViewInstances[CurrentSelectingIndex].OnSelectionChange(true);
@@ -96,7 +118,7 @@ namespace BlockPrinter.UserInterface
 
         public void Submit()
         {
-            MenuElements[CurrentSelectingIndex].OnSelect();
+            MenuElements[CurrentSelectingIndex].EventHandlerObject.SendMessage(MenuElements[CurrentSelectingIndex].OnSelectMethodName);
         }
 
         public void DiscardInstances()

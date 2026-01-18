@@ -202,6 +202,7 @@ namespace BlockPrinter
         [SerializeField] private UserInterface.BreakedPolyominosDisplay BreakedPolyominosDisplay;
         [SerializeField] private UserInterface.AttackChargeDisplay AttackChargeDisplay;
         [SerializeField] private UserInterface.DamageDisplay DamageDisplay;
+        [SerializeField] private UserInterface.PerformDisplay PerformDisplay;
 
         private void OnDrawGizmos()
         {
@@ -261,6 +262,7 @@ namespace BlockPrinter
             BreakedPolyominosDisplay.Initialize(PolyominoDatabase.Tetriminos, BlockPrefab);
             AttackChargeDisplay.Initialize(BlockPrefab);
             DamageDisplay.Initialize(BlockPrefab);
+            PerformDisplay.Initialize();
             CurrentState = State.Suspend;
         }
 
@@ -480,6 +482,14 @@ namespace BlockPrinter
                                 CurrentPureChain++;
                                 CurrentActiveChain++;
                             }
+                            if(CurrentPureChain > 1)
+                            {
+                                PerformDisplay.OnPerformPureChain(CurrentPureChain);
+                            }
+                            if(CurrentActiveChain > 1)
+                            {
+                                PerformDisplay.OnPerformActiveChain(CurrentActiveChain);
+                            }
                             IsBreaked = true;
                             BreakedPolyominoCount++;
                             EarnedScoreLocalTotal += CalcBlockBreakScore(CheckColor, CurrentPureChain, CurrentActiveChain);
@@ -498,7 +508,10 @@ namespace BlockPrinter
             if (BreakedPolyominoCount != 0)
             {
                 EarnScore(EarnedScoreLocalTotal * BreakedPolyominoCount);
-                
+                if(BreakedPolyominoCount > 1)
+                {
+                    PerformDisplay.OnPerformSynchronousBreak(BreakedPolyominoCount);
+                }
             }
             if (!IsBreaked)
             {
@@ -849,6 +862,7 @@ namespace BlockPrinter
             BreakedPolyominosDisplay.DiscardInstances();
             AttackChargeDisplay.DiscardInstances();
             DamageDisplay.DiscardInstances();
+            PerformDisplay.DiscardInstance();
         }
 
         public bool IsGameOver()

@@ -102,7 +102,7 @@ namespace BlockPrinter
                     {
 
                         EvalDynamic(0);
-                            if(false)
+                        /*
                         {
                             System.Text.StringBuilder sb = new System.Text.StringBuilder();
                             sb.Append("CPU Update: ");
@@ -114,6 +114,7 @@ namespace BlockPrinter
                             sb.Append(BestSequenceEval.ToString());
                             Debug.Log(sb.ToString());
                         }
+                        //*/
                     }
                     CurrentProcessSequenceIndex = 0;
                     CurrentState = State.ProcessingSequence;

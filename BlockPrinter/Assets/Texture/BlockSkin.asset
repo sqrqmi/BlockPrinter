@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BlockSkin
   m_EditorClassIdentifier: 
   None: {fileID: 0}
-  Red: {fileID: -2109182767, guid: dcdfd27200678fc45b102c7a5b4ecd29, type: 3}
-  Blue: {fileID: 1664417209, guid: dcdfd27200678fc45b102c7a5b4ecd29, type: 3}
-  Green: {fileID: 26070052, guid: dcdfd27200678fc45b102c7a5b4ecd29, type: 3}
-  Yellow: {fileID: -166711948, guid: dcdfd27200678fc45b102c7a5b4ecd29, type: 3}
+  Red: {fileID: -733978703875111378, guid: 792ff3dbc38e4d14a8a8adc205554312, type: 3}
+  Blue: {fileID: -3296769056776602136, guid: 792ff3dbc38e4d14a8a8adc205554312, type: 3}
+  Green: {fileID: 1604087291, guid: 792ff3dbc38e4d14a8a8adc205554312, type: 3}
+  Yellow: {fileID: -207068188, guid: 792ff3dbc38e4d14a8a8adc205554312, type: 3}

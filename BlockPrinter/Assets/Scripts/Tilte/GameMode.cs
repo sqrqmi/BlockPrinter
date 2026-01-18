@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace BlockPrinter
 {
@@ -13,6 +14,8 @@ namespace BlockPrinter
     {
         //static‚ÅplayerMode‚ğéŒ¾
         public static PlayerMode playerMode = PlayerMode.Double;
+
+        [SerializeField] private UserInterface.MenuList MainMenu;
 
         //ˆêlƒvƒŒƒC‚Éİ’è‚·‚é
         public void SetSingle()
@@ -31,13 +34,35 @@ namespace BlockPrinter
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-        
+            MainMenu.Initialize(null);
         }
 
         // Update is called once per frame
         void Update()
         {
         
+        }
+
+        public void StartSingleMode()
+        {
+            SceneManager.LoadScene("GameMain");
+        }
+
+        public void StartBattleMode()
+        {
+            SceneManager.LoadScene("BattleModeScene");
+        }
+
+        public void StartFourPlayerMode()
+        {
+            SceneManager.LoadScene("FourPlayerModeScene");
+        }
+
+        public void ExitApplication()
+        {
+            Application.Quit(0);
+            Debug.Log("Application Exit");
+            Debug.Break();
         }
     }
 }

@@ -12,11 +12,14 @@ namespace BlockPrinter
 
         [SerializeField] private UserInterface.RecordDisplay recordDisplay;
 
+        [SerializeField] private UserInterface.MenuList menuList;
+
         //一人プレイを開始する（FieldSystemを一つ初期化）
         public void Rungame()
         {
             //フィールドシステムの初期化処理を呼び出し
             fieldSystem.Initialize(0, null, OnGameOver);
+            fieldSystem.SetState(FieldSystem.State.Active);
         }
 
 
@@ -24,7 +27,7 @@ namespace BlockPrinter
         void Start()
         {
             //一人モードが選択されていたら一人モードのゲームを開始する
-            if( GameMode.playerMode == PlayerMode.Single) { Rungame(); }
+            Rungame();
         }
 
         // Update is called once per frame
@@ -34,15 +37,18 @@ namespace BlockPrinter
 
         public void OnGameOver(int PlayerID)
         {
-            StartCoroutine(InternalRoutine());
-            IEnumerator InternalRoutine()
-            {
-                recordDisplay.UpdateRecord(fieldSystem.GetLastRecord());
-                yield return new WaitForSeconds(3.0f);
-                SceneManager.LoadScene("TitleScene");
-                yield break;
-            }
+            menuList.Initialize(null);
+        }
 
+        public void OnRestart()
+        {
+            fieldSystem.DiscardInstances();
+            fieldSystem.Initialize(0, null, OnGameOver);
+        }
+
+        public void LeaveMode()
+        {
+            SceneManager.LoadScene("TitleScene");
 
         }
     }

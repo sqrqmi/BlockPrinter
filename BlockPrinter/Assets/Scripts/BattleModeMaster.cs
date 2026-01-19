@@ -12,7 +12,7 @@ namespace BlockPrinter
 
         [SerializeField] private float ReadyWaitTime;
 
-
+        [SerializeField] private UserInterface.MenuList AfterGameMenu;
 
         private int[] Wins;
 
@@ -79,29 +79,36 @@ namespace BlockPrinter
             {
                 Debug.Log($"Winner: {LastFieldId}");
                 RoundEnd(LastFieldId);
-                StartCoroutine(InternalRoutine());
-                IEnumerator InternalRoutine()
-                {
-                    float WaitTime = 10.0f; 
-                    while(WaitTime >= 0.0f)
-                    {
-                        if(Input.GetKeyDown(KeyCode.Return))
-                        {
-                            CleanupSystems();
-                            StartRound();
-                            yield break;
-                        }
-                        else if(Input.GetKeyDown(KeyCode.Escape))
-                        {
-                            break;
-                        }
-                        WaitTime -= Time.deltaTime;
-                        yield return null;
-                    }
-                    LeaveMode();
-                    yield break;
-                }
+                AfterGameMenu.Initialize(null);
+                //StartCoroutine(InternalRoutine());
+                //IEnumerator InternalRoutine()
+                //{
+                //    float WaitTime = 10.0f; 
+                //    while(WaitTime >= 0.0f)
+                //    {
+                //        if(Input.GetKeyDown(KeyCode.Return))
+                //        {
+                //            CleanupSystems();
+                //            StartRound();
+                //            yield break;
+                //        }
+                //        else if(Input.GetKeyDown(KeyCode.Escape))
+                //        {
+                //            break;
+                //        }
+                //        WaitTime -= Time.deltaTime;
+                //        yield return null;
+                //    }
+                //    LeaveMode();
+                //    yield break;
+                //}
             }
+        }
+
+        public void OnNextRound()
+        {
+            CleanupSystems();
+            StartRound();
         }
 
         public void RoundEnd(int WinnerId)

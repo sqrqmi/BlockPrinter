@@ -47,7 +47,7 @@ namespace BlockPrinter
         private ControlPettern[] ControlSequence;
         private int BestSequenceEval;
         private int CurrentProcessSequenceIndex;
-        private int ContinouslyWaitCount;
+        private float ContinouslyWaitTime;
         public static CPUProperty LevelOf(int Level, FieldSystem System)
         {
             CPUProperty Result = new CPUProperty();
@@ -68,7 +68,7 @@ namespace BlockPrinter
             Result.TemporalSequence = new ControlPettern[Result.Prop.MaxDepth];
             Result.ControlSequence = new ControlPettern[Result.Prop.MaxDepth];
             Result.CurrentProcessSequenceIndex = 0;
-            Result.ContinouslyWaitCount = 0;
+            Result.ContinouslyWaitTime = 0.0f;
             return Result;
         }
 
@@ -93,7 +93,7 @@ namespace BlockPrinter
                     {
                         TemporalSequence[i] = ControlPettern.Wait;
                     }
-                    if(ContinouslyWaitCount > 20)
+                    if(ContinouslyWaitTime > 10.0f)
                     {
                         ControlSequence[0] = UnityEngine.Random.value < 0.5f ? ControlPettern.Left : ControlPettern.Right;
                         Debug.Log("CPU Update: Stuck Forcely Remover Activated.");
@@ -102,7 +102,7 @@ namespace BlockPrinter
                     {
 
                         EvalDynamic(0);
-                            if(false)
+                        /*
                         {
                             System.Text.StringBuilder sb = new System.Text.StringBuilder();
                             sb.Append("CPU Update: ");
@@ -114,6 +114,7 @@ namespace BlockPrinter
                             sb.Append(BestSequenceEval.ToString());
                             Debug.Log(sb.ToString());
                         }
+                        //*/
                     }
                     CurrentProcessSequenceIndex = 0;
                     CurrentState = State.ProcessingSequence;
@@ -126,12 +127,12 @@ namespace BlockPrinter
                     switch(ControlSequence[CurrentProcessSequenceIndex])
                     {
                         case ControlPettern.Wait:
-                            ContinouslyWaitCount++;
+                            ContinouslyWaitTime += Prop.BaseControlSpan;
                             CurrentState = State.Thinking;
                             return FieldControlInput.Neutral;
 
-                        case ControlPettern.Left: ContinouslyWaitCount = 0; Result.Left = true; break;
-                        case ControlPettern.Right: ContinouslyWaitCount = 0; Result.Right = true; break;
+                        case ControlPettern.Left: ContinouslyWaitTime = 0.0f; Result.Left = true; break;
+                        case ControlPettern.Right: ContinouslyWaitTime = 0.0f; Result.Right = true; break;
                     }
                     CurrentProcessSequenceIndex++;
                     if(CurrentProcessSequenceIndex >= ControlSequence.Length)
@@ -156,7 +157,7 @@ namespace BlockPrinter
                 switch(TemporalSequence[i])
                 {
                     case ControlPettern.Wait:
-                        Eval += ContinouslyWaitCount * -500;
+                        Eval += (int)(ContinouslyWaitTime * -500);
                         break;
                     case ControlPettern.Left:
                         if(!VirtualField.TryPlaceBlock(-1))

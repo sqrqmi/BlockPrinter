@@ -96,7 +96,7 @@ namespace BlockPrinter
             //‰‰o‚È‚ª‚·
             var effects = Instantiate(this.BreakEffects);
 
-            effects.Initialize(6, EffectColor.Red, this.transform.position);
+            effects.Initialize(6, EffectColor.Orange, this.transform.position);
             effects.Run();
         }
 

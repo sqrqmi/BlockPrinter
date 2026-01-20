@@ -70,6 +70,11 @@ namespace BlockPrinter
             return this.color;
         }
 
+        public void SetSprite(Sprite newSprite)
+        {
+            this.sprite.sprite = newSprite;
+        }
+
         //ブロックの破壊演出(ポリオミノの場合)
         public void OnBreakBlock()
         {
@@ -125,9 +130,9 @@ namespace BlockPrinter
         }
 
         //消灯
-        public void Fade()
+        public void Fade(float a)
         {
-            Color newColor = new Color(this.sprite.color.r, this.sprite.color.g, this.sprite.color.b, 0.3f);
+            Color newColor = new Color(this.sprite.color.r, this.sprite.color.g, this.sprite.color.b, a);
 
             this.sprite.color = newColor;
         }
@@ -195,6 +200,11 @@ namespace BlockPrinter
             float euclidean = dx * dx + dy * dy + dz * dz;
 
             return Mathf.Sqrt(euclidean);
+        }
+
+        public void SetScale(float scale)
+        {
+            this.transform.localScale = new Vector3(scale, scale, scale);
         }
 
         void Start()

@@ -70,7 +70,7 @@ namespace BlockPrinter.UserInterface
         {
             for (int i = 0; i < this.Polyomino.Length; ++i)
             {
-                this.Polyomino[i].Fade();
+                this.Polyomino[i].Fade(0.3f);
             }
         }
 

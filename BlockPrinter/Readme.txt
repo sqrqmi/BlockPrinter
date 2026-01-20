@@ -11,7 +11,7 @@ GPG2進級制作
 　25CI0333　吉田行宏
 　　エフェクト部分
 　　その他こまごまとしたところ
-  スクリプト担当箇所詳細
+  スクリプト担当箇所詳細(日本電子専門学校のアカウントで閲覧可能)
   https://docs.google.com/spreadsheets/d/1tbzfbz3FJYKwGLiL61SrzA8Fj2erhp4x47HS4jXpWWA/edit?usp=sharing
 
 

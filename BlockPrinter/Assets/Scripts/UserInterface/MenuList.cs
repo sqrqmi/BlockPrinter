@@ -92,6 +92,7 @@ namespace BlockPrinter.UserInterface
             {
                 SuperListInstance.SwitchActive(true);
             }
+            SwitchActive(false);
             DiscardInstances();
         }
 
@@ -125,7 +126,10 @@ namespace BlockPrinter.UserInterface
         {
             for(int i = 0; i < MenuElementViewInstances.Length; i++)
             {
-                Destroy(MenuElementViewInstances[i].gameObject);
+                if(MenuElementViewInstances[i] != null)
+                {
+                    Destroy(MenuElementViewInstances[i].gameObject);
+                }
             }
             Destroy(CursorInstance.gameObject);
 

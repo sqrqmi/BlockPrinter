@@ -13,11 +13,12 @@ namespace Util
 
         public override void OnUpdate(float t)
         {
-            this.transform.localPosition = InitialVelocity * t + Acceleration * (t * t * 0.5f) + From;
+            this.transform.localPosition = InitialVelocity * t + Acceleration * (t * t) + From;
         }
 
         public override void OnStartAnimation()
-        {
+        {          
+            Acceleration = (To - (From + InitialVelocity));
             this.transform.localPosition = From;
         }
 
@@ -31,9 +32,8 @@ namespace Util
             NewMovement.From = From;
             NewMovement.To = To;
             NewMovement.MoveTime = Time;
-            NewMovement.InitialVelocity = InitialVelocity;
-            float VelocityScalar = Time * Time * 0.5f;
-            NewMovement.Acceleration = ((To - (From + InitialVelocity * Time)) / VelocityScalar);
+            NewMovement.InitialVelocity = InitialVelocity * Time;
+
             NewMovement.Mode = InterpolationMode.Linear;
             NewMovement.StartAnimation();
             return NewMovement;

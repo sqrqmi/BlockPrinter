@@ -52,8 +52,10 @@ MonoBehaviour:
   LimitTime: 10
   LimitGauge: {fileID: 5269806827700130207}
   RemainingBlocks: {fileID: 1378550195209653995}
+  OveredDamageText: {fileID: 3281988532193332144}
   DamageBlocks: []
   DirectionBlocks: []
+  OveredDamage: 0
 --- !u!1 &1378550195209653995
 GameObject:
   m_ObjectHideFlags: 0
@@ -82,9 +84,63 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 860039415708643266}
   m_Father: {fileID: 4074220054576392404}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2156625837976131968
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 860039415708643266}
+  - component: {fileID: 3281988532193332144}
+  m_Layer: 0
+  m_Name: OveredDamage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &860039415708643266
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2156625837976131968}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.6, y: 1.8, z: -5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 7240807816009140068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3281988532193332144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2156625837976131968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4d9e77fbdb0e054b8a1a47ea8c7a1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Text: 
+  Font: {fileID: 11400000, guid: 868ad0bc0849360459d8973b57a1e4f9, type: 2}
+  Format:
+    Spacing: 0
+    LineHeight: 0
+  FontColor: {r: 1, g: 1, b: 1, a: 1}
+  HorizontalAlignment: 0
+  VerticalAlignment: 0
+  IsDisplayOnStart: 1
 --- !u!1 &2563336501234172103
 GameObject:
   m_ObjectHideFlags: 0

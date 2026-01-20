@@ -12,12 +12,14 @@ namespace BlockPrinter.UserInterface
         [SerializeField] private float LimitTime = 10f;
         [SerializeField] private GaugeRenderer LimitGauge;
         [SerializeField] private GameObject RemainingBlocks;
+        [SerializeField] private BitmapText OveredDamageText;
         private BlockAppearence BlockPrefab;
         [SerializeField] private BlockAppearence[] DamageBlocks;    //ダメージ用
         [SerializeField] private BlockAppearence[] DirectionBlocks;       //演出用
         private BlockColor[] BlockColors;                           //追加攻撃検知用
         private float[] AttackEffectTimes = { 0.5f, 0.75f };
         private int AddedAttack = 0;
+        [SerializeField] private int OveredDamage = 0;
         private bool GameOvered = false;
 
         public void Initialize(BlockAppearence BlockPrefab)
@@ -41,6 +43,8 @@ namespace BlockPrinter.UserInterface
             DestroyAllDamageBlock();
             DestroyAllDirectionBlock();
             this.BlockPrefab = null;
+            this.OveredDamage = 0;
+            this.OveredDamageText.UpdateText("");
         }
 
         //ダメージブロックの更新
@@ -62,6 +66,11 @@ namespace BlockPrinter.UserInterface
                 Vector3 endPos = this.DamageBlocks[i].transform.localPosition;
                 this.DamageBlocks[i].MoveNextBlock(startPos, endPos);
             }
+
+            this.OveredDamage--;
+            string over = "";
+            if( this.OveredDamage > 0 ) { over = this.OveredDamage.ToString(); }
+            this.OveredDamageText.UpdateText(over);
         }
 
         //ダメージを受けたときの処理
@@ -71,15 +80,18 @@ namespace BlockPrinter.UserInterface
             for( int i = 0; i < blockColors.Length; i++ )
             {
                 damagedSum++;
-                if (blockColors[i+1] == BlockColor.None)
+                if (i + 1 < blockColors.Length)
                 {
-                    break;
+                    if (blockColors[i + 1] == BlockColor.None)
+                    {
+                        break;
+                    }
                 }
             }
-            Debug.Log($"Damaged Total Blocks {damagedSum} / Add Attacks {attackSum}");
 
             this.AddedAttack = 0;
             if( damagedSum != attackSum ){ AddedAttack = damagedSum - attackSum; }
+            if( damagedSum > this.damageBlockCount ){ this.OveredDamage = damagedSum - this.damageBlockCount + 1; }
 
             DestroyAllDirectionBlock();
             GenerateDamageBlock(damagedSum, ref this.DirectionBlocks);
@@ -118,10 +130,9 @@ namespace BlockPrinter.UserInterface
             for( int i = AddedAttack; i < this.DirectionBlocks.Length; i++ )
             {
                 Vector3 start = this.DirectionBlocks[i].transform.position;
-                Vector3 end = Vector3.zero;
-
-                //if (i < 6){ end = new Vector3(-1.5f, 0.25f * i, 0f); }
-                //else{ end = new Vector3(-1.5f, 0.25f * 6, 0f); }
+                float dx = Random.Range(0f, 3f);
+                float dy = Random.Range(0f, 3f);
+                Vector3 end = new Vector3(dx, dy, 0f);
 
                 this.DirectionBlocks[i].MoveSircleAttack(start, end, this.AttackEffectTimes[1]);
             }
@@ -180,11 +191,14 @@ namespace BlockPrinter.UserInterface
 
         private void DestroyAllDirectionBlock()
         {
-            foreach (var block in this.DirectionBlocks)
+            if (this.DirectionBlocks != null)
             {
-                if (block != null)
+                foreach (var block in this.DirectionBlocks)
                 {
-                    Destroy(block.gameObject);
+                    if (block != null)
+                    {
+                        Destroy(block.gameObject);
+                    }
                 }
             }
         }
@@ -192,7 +206,7 @@ namespace BlockPrinter.UserInterface
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            if( GameMode.playerMode == PlayerMode.Single)
+            if ( GameMode.playerMode == PlayerMode.Single)
             {
                 Destroy(gameObject);
             }

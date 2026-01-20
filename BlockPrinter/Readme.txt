@@ -11,12 +11,14 @@ GPG2進級制作
 　25CI0333　吉田行宏
 　　エフェクト部分
 　　その他こまごまとしたところ
+  スクリプト担当箇所詳細
+  https://docs.google.com/spreadsheets/d/1tbzfbz3FJYKwGLiL61SrzA8Fj2erhp4x47HS4jXpWWA/edit?usp=sharing
 
 
 使用したアセット・ツール
 　dotpict
 　　英数字フォント素材作成用に使用したツール
-　なんとか
+　CARTOON FX FREE
 　　爆発エフェクト素材
 　GitHub
 

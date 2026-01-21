@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2355731616120498759}
+  - component: {fileID: 9206373684029791661}
   m_Layer: 0
   m_Name: Cursor
   m_TagString: Untagged
@@ -32,6 +33,19 @@ Transform:
   - {fileID: 375410499370444772}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9206373684029791661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2218445189813700990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fadba4006de3c34f8f8310886ef0b54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SubmitEffectPrefab: {fileID: 986639229455462367, guid: 05aab551c8b0d6b4f998f8084bb2f469, type: 3}
 --- !u!1 &8966639878952043005
 GameObject:
   m_ObjectHideFlags: 0

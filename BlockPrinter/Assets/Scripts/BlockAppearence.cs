@@ -142,6 +142,9 @@ namespace BlockPrinter
         //消灯（時間経過で徐々に）
         public void SetAlpha(float start, float alpha, float dulation)
         {
+            Color startColor = new Color(this.sprite.color.r, this.sprite.color.g, this.sprite.color.b, start);
+            Color endColor = new Color(this.sprite.color.r, this.sprite.color.g, this.sprite.color.b, alpha);
+            Util.LinearGradient.Create(this.sprite.gameObject, startColor, endColor, dulation, InterpolationMode.Linear);
         }
 
         //線形補間を利用して移動(引数StartPositionから引数EndPositionまでの直線距離の引数Persentの割合

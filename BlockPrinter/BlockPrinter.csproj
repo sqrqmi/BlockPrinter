@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\BackGround\BackGround.cs" />
     <Compile Include="Assets\Scripts\BreakedPolyominosDisplay.cs" />
     <Compile Include="Assets\Scripts\BlockAppearence.cs" />
+    <Compile Include="Assets\Scripts\SettingMenu.cs" />
     <Compile Include="Assets\Scripts\UserInterface\MenuCursor.cs" />
     <Compile Include="Assets\Scripts\CandidateBlockDisplay.cs" />
     <Compile Include="Assets\Scripts\ScoreDisplay.cs" />
@@ -77,10 +78,12 @@
     <Compile Include="Assets\Scripts\Effect\RainbowEffects.cs" />
     <Compile Include="Assets\Scripts\UserInterface\MenuElementView.cs" />
     <Compile Include="Assets\Scripts\CPUProperty.cs" />
+    <Compile Include="Assets\Scripts\UserInterface\ValueSelector.cs" />
     <Compile Include="Assets\Scripts\RecordDisplay.cs" />
     <Compile Include="Assets\Scripts\UserInterface\MenuList.cs" />
     <Compile Include="Assets\Scripts\AttackChargeDisplay.cs" />
     <Compile Include="Assets\Scripts\DamageDisplay.cs" />
+    <Compile Include="Assets\Scripts\Misc\ForceQuit.cs" />
     <Compile Include="Assets\Scripts\BattleModeMaster.cs" />
     <Compile Include="Assets\Scripts\Tilte\ButtonDown.cs" />
     <Compile Include="Assets\Scripts\PlayerCharacter.cs" />
@@ -91,6 +94,7 @@
     <Compile Include="Assets\Scripts\Effect\BreakEffects.cs" />
     <Compile Include="Assets\Scripts\BackGround\BGSkin.cs" />
     <Compile Include="Assets\Scripts\BlockSkin.cs" />
+    <Compile Include="Assets\Scripts\UserInterface\MenuBase.cs" />
     <Compile Include="Assets\Scripts\Effect\GameOverEffect.cs" />
     <Compile Include="Assets\Scripts\FieldController.cs" />
     <Compile Include="Assets\Scripts\SinglePlayerMaster.cs" />

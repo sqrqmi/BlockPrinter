@@ -446,7 +446,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BlockPrefab: {fileID: 6837283636279308050, guid: ad4e7e22e4404e94ea0df1f2d4ac9bb2, type: 3}
-  TotalAnimationTime: 10
+  TotalAnimationTime: 0.5
 --- !u!4 &1537526965
 Transform:
   m_ObjectHideFlags: 0

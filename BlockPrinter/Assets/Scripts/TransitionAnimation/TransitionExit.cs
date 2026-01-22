@@ -107,26 +107,5 @@ namespace BlockPrinter
                 }
             }
         }
-
-        private void Start()
-        {
-            StartAnimation();
-        }
-
-        private void Update()
-        {
-            Debug.Log($"Animation Finished {IsDone()}");
-
-            string log = "";
-            for( int y  = 0; y < BG_Y; y++)
-            {
-                for( int x = 0; x < BG_X; x++)
-                {
-                    int index = y * BG_X + x;
-                    log += " / " + index + "Block Alpha" + this.Blocks[index].Block.sprite.color.a;
-                }
-            }
-            //Debug.Log(log);
-        }
     }
 }

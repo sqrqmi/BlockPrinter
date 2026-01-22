@@ -107,15 +107,5 @@ namespace BlockPrinter
                 }
             }
         }
-
-        private void Start()
-        {
-            StartAnimation();
-        }
-
-        private void Update()
-        {
-            Debug.Log($"Animation Finished {IsDone()}");
-        }
     }
 }

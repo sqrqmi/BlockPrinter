@@ -26,19 +26,19 @@ namespace Util
             Rend.color = StartColor;
         }
 
-        public static LinearMovement Create(GameObject Obj, Vector3 From, Vector3 To, float Time, InterpolationMode Mode)
+        public static LinearGradient Create(GameObject Obj, Color From, Color To, float Time, InterpolationMode Mode)
         {
-            LinearMovement NewMovement = Obj.GetComponent<LinearMovement>();
-            if (NewMovement == null)
+            LinearGradient NewGradient = Obj.GetComponent<LinearGradient>();
+            if (NewGradient == null)
             {
-                NewMovement = Obj.AddComponent<LinearMovement>();
+                NewGradient = Obj.AddComponent<LinearGradient>();
             }
-            NewMovement.From = From;
-            NewMovement.To = To;
-            NewMovement.MoveTime = Time;
-            NewMovement.Mode = Mode;
-            NewMovement.StartAnimation();
-            return NewMovement;
+            NewGradient.StartColor = From;
+            NewGradient.EndColor = To;
+            NewGradient.MoveTime = Time;
+            NewGradient.Mode = Mode;
+            NewGradient.StartAnimation();
+            return NewGradient;
         }
     }
 }

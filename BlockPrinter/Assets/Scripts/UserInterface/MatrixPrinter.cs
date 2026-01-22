@@ -13,7 +13,7 @@ namespace BlockPrinter
         [SerializeField] private FieldLayout Layout;
 
         [SerializeField] private Vector2Int FieldSize;
-        [SerializeField] private float PlaceSpan;   
+        [SerializeField] private float PlaceSpan;
         private Field2d<BlockColor> Field;
         private float WaitTime;
 
@@ -22,19 +22,23 @@ namespace BlockPrinter
             WaitTime = 0.0f;
             Field = new Field2d<BlockColor>(FieldSize);
             int StrIndex = 0;
-            for(int y = 0; y < FieldSize.y; y++)
+            for (int y = 0; y < FieldSize.y; y++)
             {
-                for(int x = 0; x < FieldSize.x; x++)
+                for (int x = 0; x < FieldSize.x; x++)
                 {
-                    while(PrintingData.text[StrIndex] == '\n' && StrIndex < PrintingData.text.Length)
+                    while (PrintingData.text[StrIndex] == '\n')
                     {
                         StrIndex++;
+                        if (StrIndex >= PrintingData.text.Length)
+                        {
+                            return;
+                        }
                     }
-                    if(StrIndex >= PrintingData.text.Length)
-                    {
-                        return;
-                    }
-                    Field[new Vector2Int(x, y)] = (BlockColor)(PrintingData.text[StrIndex] - '0');
+                    Vector2Int Pos = new Vector2Int(x, y);
+                    Field[Pos] = (BlockColor)(PrintingData.text[StrIndex] - '0');
+                    BlockAppearence NewBlock = Instantiate(BlockPrefab);
+                    NewBlock.transform.SetParent(this.transform);
+                    NewBlock.Initialize(Layout.Transform(Pos), Field[Pos]);
                     StrIndex++;
                 }
             }
@@ -43,7 +47,7 @@ namespace BlockPrinter
         private void Update()
         {
             WaitTime -= Time.deltaTime;
-            if(WaitTime < 0.0f)
+            if (WaitTime < 0.0f)
             {
                 WaitTime += PlaceSpan;
 

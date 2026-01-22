@@ -6,6 +6,8 @@ namespace BlockPrinter
     [Serializable]
     public struct FieldController
     {
+        public static FieldController[] LastSettings;
+
         public enum UseMode
         {
             Player,

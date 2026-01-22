@@ -148,15 +148,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3acc251dc9fa2fb4d992bc9f6d528498, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BlockPrefab: {fileID: 6837283636279308050, guid: ad4e7e22e4404e94ea0df1f2d4ac9bb2, type: 3}
+  BlockPrefab: {fileID: 6837283636279308050, guid: 350b8a9296a786c419b543170beb3c4a, type: 3}
   PrintingData: {fileID: 4900000, guid: dedfc077119ccb546b938b28ea2dee20, type: 3}
   PlayerInstance: {fileID: 1584204618099499110, guid: 86d978602cbb05645bbe5e759c6cb3f3, type: 3}
   Layout:
-    AxisX: {x: 1, y: 0, z: 0}
-    AxisY: {x: 0, y: 1, z: 0}
-    AxisZ: {x: 0, y: 0, z: 1}
-    Pivot: {x: 0, y: 0, z: 0}
-  FieldSize: {x: 0, y: 0}
+    AxisX: {x: 0.5, y: 0, z: 0}
+    AxisY: {x: 0, y: -0.5, z: 0}
+    AxisZ: {x: 0, y: 0, z: 0.5}
+    Pivot: {x: -8, y: 4, z: 0}
+  FieldSize: {x: 29, y: 10}
   PlaceSpan: 0
 --- !u!4 &74482170
 Transform:
@@ -169,7 +169,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -430,7 +430,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3546921252569685259, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
       propertyPath: MenuElements.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3546921252569685259, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
       propertyPath: MenuElements.Array.data[0].Label
@@ -438,14 +438,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3546921252569685259, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
       propertyPath: MenuElements.Array.data[1].Label
-      value: Battle Mode
+      value: Vs. CPU Mode
       objectReference: {fileID: 0}
     - target: {fileID: 3546921252569685259, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
       propertyPath: MenuElements.Array.data[2].Label
-      value: 4 Player Mode
+      value: Vs. Player Mode
       objectReference: {fileID: 0}
     - target: {fileID: 3546921252569685259, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
       propertyPath: MenuElements.Array.data[3].Label
+      value: 4 Player Mode
+      objectReference: {fileID: 0}
+    - target: {fileID: 3546921252569685259, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
+      propertyPath: MenuElements.Array.data[4].Label
       value: Exit
       objectReference: {fileID: 0}
     - target: {fileID: 3546921252569685259, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
@@ -462,7 +466,7 @@ PrefabInstance:
       objectReference: {fileID: 1162454598}
     - target: {fileID: 3546921252569685259, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
       propertyPath: MenuElements.Array.data[1].OnSelectMethodName
-      value: StartBattleMode
+      value: StartVersusCPUMode
       objectReference: {fileID: 0}
     - target: {fileID: 3546921252569685259, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
       propertyPath: MenuElements.Array.data[2].EventHandlerObject
@@ -470,7 +474,7 @@ PrefabInstance:
       objectReference: {fileID: 1162454598}
     - target: {fileID: 3546921252569685259, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
       propertyPath: MenuElements.Array.data[2].OnSelectMethodName
-      value: StartFourPlayerMode
+      value: StartVersusPlayerMode
       objectReference: {fileID: 0}
     - target: {fileID: 3546921252569685259, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
       propertyPath: MenuElements.Array.data[3].EventHandlerObject
@@ -478,6 +482,14 @@ PrefabInstance:
       objectReference: {fileID: 1162454598}
     - target: {fileID: 3546921252569685259, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
       propertyPath: MenuElements.Array.data[3].OnSelectMethodName
+      value: StartFourPlayerMode
+      objectReference: {fileID: 0}
+    - target: {fileID: 3546921252569685259, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
+      propertyPath: MenuElements.Array.data[4].EventHandlerObject
+      value: 
+      objectReference: {fileID: 1162454598}
+    - target: {fileID: 3546921252569685259, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
+      propertyPath: MenuElements.Array.data[4].OnSelectMethodName
       value: ExitApplication
       objectReference: {fileID: 0}
     - target: {fileID: 4914019109613360030, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
@@ -486,7 +498,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4914019109613360030, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4914019109613360030, guid: 426c50314e6a7214c9ced450c4c2c640, type: 3}
       propertyPath: m_LocalPosition.z

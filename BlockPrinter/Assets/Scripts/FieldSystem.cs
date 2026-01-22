@@ -213,7 +213,7 @@ namespace BlockPrinter
         }
 
 
-        public void Initialize(int NewIdentifier, Action<int, int, Vector3> OnSendAttackCharge, Action<int> OnGameOver)
+        public void Initialize(int NewIdentifier, FieldController NewController, Action<int, int, Vector3> OnSendAttackCharge, Action<int> OnGameOver)
         {
             Identifier = NewIdentifier;
             this.OnSendAttackChargeCallback = OnSendAttackCharge;
@@ -221,6 +221,7 @@ namespace BlockPrinter
             CurrentUnitTime = 0.5f;
             HorizontalPosition = FieldSize.x / 2;
             Player.Initialize(Layout.Transform(new Vector2Int(HorizontalPosition, FieldSize.y)));
+            Controller = NewController;
             Controller.Initialize(this);
             Field = new Field2d<BlockElement>(FieldSize);
             Field.Fill(BlockElement.Empty);

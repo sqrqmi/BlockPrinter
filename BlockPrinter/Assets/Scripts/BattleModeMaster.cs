@@ -39,7 +39,7 @@ namespace BlockPrinter
 
                 for (int i = 0; i < FieldSystems.Length; i++)
                 {
-                    FieldSystems[i].Initialize(i, OnSendAttackCharge, OnGameOver);
+                    FieldSystems[i].Initialize(i, FieldController.LastSettings[i], OnSendAttackCharge, OnGameOver);
                 }
                 yield return new WaitForSeconds(ReadyWaitTime);
 

@@ -18,14 +18,14 @@ namespace BlockPrinter.UserInterface
         private MenuList SuperListInstance;
 
         [SerializeField] private MenuElementView MenuElementPrefab;
-        [SerializeField] private GameObject CursorPrefab;
+        [SerializeField] private MenuCursor CursorPrefab;
         [SerializeField] private GameObject MenuPivot;
         [SerializeField] private FieldLayout AlignmentLayout;
         [SerializeField] private Util.Direction SortDirection;
         [SerializeField] private MenuElement[] MenuElements;
         [SerializeField] private bool AllowCancel;
 
-        private GameObject CursorInstance;
+        private MenuCursor CursorInstance;
         private MenuElementView[] MenuElementViewInstances;
         private int CurrentSelectingIndex;
         private bool IsActive;
@@ -92,6 +92,7 @@ namespace BlockPrinter.UserInterface
             {
                 SuperListInstance.SwitchActive(true);
             }
+            SwitchActive(false);
             DiscardInstances();
         }
 
@@ -113,19 +114,23 @@ namespace BlockPrinter.UserInterface
             MenuElementViewInstances[CurrentSelectingIndex].OnSelectionChange(false);
             CurrentSelectingIndex = NewIndex;
             MenuElementViewInstances[CurrentSelectingIndex].OnSelectionChange(true);
-            CursorInstance.transform.localPosition = AlignmentLayout.Transform(CurrentSelectingIndex * Vector2Int.right);
+            CursorInstance.OnChangeSelection(AlignmentLayout.Transform(CurrentSelectingIndex * Vector2Int.right));
         }
 
         public void Submit()
         {
             MenuElements[CurrentSelectingIndex].EventHandlerObject.SendMessage(MenuElements[CurrentSelectingIndex].OnSelectMethodName);
+            CursorInstance.OnSubmit();
         }
 
         public void DiscardInstances()
         {
             for(int i = 0; i < MenuElementViewInstances.Length; i++)
             {
-                Destroy(MenuElementViewInstances[i].gameObject);
+                if(MenuElementViewInstances[i] != null)
+                {
+                    Destroy(MenuElementViewInstances[i].gameObject);
+                }
             }
             Destroy(CursorInstance.gameObject);
 

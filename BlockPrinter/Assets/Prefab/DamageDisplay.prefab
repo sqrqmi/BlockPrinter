@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Text: 
-  Font: {fileID: 11400000, guid: 868ad0bc0849360459d8973b57a1e4f9, type: 2}
+  Font: {fileID: 11400000, guid: 0c997f010f7b35d488e4a1368c697d2b, type: 2}
   Format:
     Spacing: 0
     LineHeight: 0

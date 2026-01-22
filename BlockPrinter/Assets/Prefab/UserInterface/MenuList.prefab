@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MenuElementPrefab: {fileID: 7108667859925775782, guid: 1470ae2bc89ac4e40bf1859ad54ca8b2, type: 3}
-  CursorPrefab: {fileID: 2218445189813700990, guid: 8e34682e89a0bce43955f81b0760dc72, type: 3}
+  CursorPrefab: {fileID: 9206373684029791661, guid: 8e34682e89a0bce43955f81b0760dc72, type: 3}
   MenuPivot: {fileID: 5489300547524873351}
   AlignmentLayout:
     AxisX: {x: 0, y: -1, z: 0}
@@ -55,6 +55,7 @@ MonoBehaviour:
     Pivot: {x: 0, y: 0, z: 0}
   SortDirection: 0
   MenuElements: []
+  AllowCancel: 0
 --- !u!1 &5489300547524873351
 GameObject:
   m_ObjectHideFlags: 0

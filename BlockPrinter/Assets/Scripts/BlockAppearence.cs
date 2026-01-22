@@ -22,7 +22,7 @@ namespace BlockPrinter
         [SerializeField] private BlockSkin skin;
 
         //BlockのSpriteRendererを入れる(SerializeField : インスペクター上で表示される設定)
-        [SerializeField] private SpriteRenderer sprite;
+        [SerializeField] public SpriteRenderer sprite;
 
         //Blockの破壊演出
         [SerializeField] private BreakEffects BreakEffects;
@@ -31,7 +31,7 @@ namespace BlockPrinter
         private float moveDulation;
         private Vector3 moveToPosition;
         private Vector3 startPosition;
-        [SerializeField] private Vector3 destroyPosition;
+        private Vector3 destroyPosition;
         private float destroyDistance = 0.5f;
         private bool isDestroy;
         private BlockColor color;
@@ -65,11 +65,13 @@ namespace BlockPrinter
             this.sprite.sprite = newSprite;
         }
 
+        //自身の画像の色を返す
         public BlockColor GetAppearence()
         {
             return this.color;
         }
 
+        //引数の画像を直接セットする
         public void SetSprite(Sprite newSprite)
         {
             this.sprite.sprite = newSprite;
@@ -137,6 +139,11 @@ namespace BlockPrinter
             this.sprite.color = newColor;
         }
 
+        //消灯（時間経過で徐々に）
+        public void SetAlpha(float start, float alpha, float dulation)
+        {
+        }
+
         //線形補間を利用して移動(引数StartPositionから引数EndPositionまでの直線距離の引数Persentの割合
         private void MoveToPosition(Vector3 StartPosition, Vector3 EndPosition, float Percent)
         {
@@ -184,6 +191,7 @@ namespace BlockPrinter
             this.isDestroy = true;
         }
 
+        //自身の破壊（アニメーション時）
         private void DestroyBlock()
         {
             var anim = this.gameObject.GetComponent<Util.InertialMovenent>();
@@ -192,6 +200,7 @@ namespace BlockPrinter
             SetAppearence(BlockColor.None);
         }
 
+        //3次元での2点間の距離を返す
         private float GetEuclidean(Vector3 p1, Vector3 p2)
         {
             float dx = p1.x - p2.x;
@@ -202,6 +211,7 @@ namespace BlockPrinter
             return Mathf.Sqrt(euclidean);
         }
 
+        //自身のスケールを引数の値にセット
         public void SetScale(float scale)
         {
             this.transform.localScale = new Vector3(scale, scale, scale);
@@ -215,7 +225,7 @@ namespace BlockPrinter
 
         // Update is called once per frame
         void Update()
-        {            
+        {
             if( this.isDestroy)
             {
                 if( GetEuclidean(this.transform.position, this.destroyPosition) < this.destroyDistance)
@@ -228,18 +238,19 @@ namespace BlockPrinter
             this.movingTime += Time.deltaTime;
 
             //移動時間のパーセントを計算（0除算と1を超えないように計算する）
-            float persent;
-            if( this.moveDulation <= 0f ) { persent = 1f; }
-            else
             {
-                persent = this.movingTime / this.moveDulation;
+                float persent;
+                if (this.moveDulation <= 0f) { persent = 1f; }
+                else
+                {
+                    persent = this.movingTime / this.moveDulation;
 
-                if( persent > 1f ) { persent = 1f; }
+                    if (persent > 1f) { persent = 1f; }
+                }
+
+                //移動する
+                MoveToPosition(this.startPosition, this.moveToPosition, persent);
             }
-
-            //移動する
-            MoveToPosition(this.startPosition, this.moveToPosition, persent);
-
         }
     }
 }

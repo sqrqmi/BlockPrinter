@@ -416,52 +416,6 @@ Transform:
   - {fileID: 866207768}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1537526963
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1537526965}
-  - component: {fileID: 1537526964}
-  m_Layer: 0
-  m_Name: TransitionExit
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1537526964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1537526963}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aafdad6f23f99794a9297c3c6c02f333, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BlockPrefab: {fileID: 6837283636279308050, guid: ad4e7e22e4404e94ea0df1f2d4ac9bb2, type: 3}
-  TotalAnimationTime: 0.5
---- !u!4 &1537526965
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1537526963}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1853945305
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -591,4 +545,3 @@ SceneRoots:
   - {fileID: 1162454600}
   - {fileID: 1387715406}
   - {fileID: 74482170}
-  - {fileID: 1537526965}

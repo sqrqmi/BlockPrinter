@@ -54,10 +54,20 @@ namespace BlockPrinter
 
         public void StartVersusCPUMode()
         {
+            int CPULevel = 3;
+            for(int i = 1; i < 9; i++)
+            {
+                if(Input.GetKey((KeyCode)('0' + i)))
+                {
+                    CPULevel = i;
+                    break;
+                }
+            }
+            CPULevel = Mathf.Clamp(CPULevel, 1, 8);
             FieldController.LastSettings = new FieldController[]
                 {
                     new FieldController() { Mode = FieldController.UseMode.Player, PlayerKeyConfig = new KeyConfig() { LeftKey = KeyCode.A, RightKey = KeyCode.D } },
-                    new FieldController() { Mode = FieldController.UseMode.CPU, CPUConfig = new CPUProperty() { Prop = new CPUCharacteristics() { Level = 4 } } }
+                    new FieldController() { Mode = FieldController.UseMode.CPU, CPUConfig = new CPUProperty() { Prop = new CPUCharacteristics() { Level = CPULevel } } }
                 };
             SceneManager.LoadScene("BattleModeScene");
         }

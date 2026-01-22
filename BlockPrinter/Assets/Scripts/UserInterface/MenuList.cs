@@ -59,10 +59,6 @@ namespace BlockPrinter.UserInterface
             {
                 RootInstance = this;
             }
-            else
-            {
-                SuperMenu.SwitchActive(false);
-            }
             SuperInstance = SuperMenu;
             MenuElementViewInstances = new MenuElementView[MenuElements.Length];
             for (int i = 0; i < MenuElements.Length; i++)
@@ -98,7 +94,6 @@ namespace BlockPrinter.UserInterface
             }
             IsActive = Active;
             MenuElementViewInstances[CurrentSelectingIndex].OnSelectionChange(IsActive);
-            this.gameObject.SetActive(IsActive);
         }
 
         public void ChangeSelection(int NewIndex)

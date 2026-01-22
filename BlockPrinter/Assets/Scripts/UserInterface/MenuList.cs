@@ -1,4 +1,5 @@
 using System;
+using UnityEditor.Overlays;
 using UnityEngine;
 
 namespace BlockPrinter.UserInterface
@@ -71,6 +72,7 @@ namespace BlockPrinter.UserInterface
             }
             CursorInstance = Instantiate(CursorPrefab);
             CursorInstance.transform.SetParent(MenuPivot.transform);
+            CursorInstance.Initialize(AlignmentLayout.Transform(Vector2Int.zero));
             CurrentSelectingIndex = 0;
             ChangeSelection(0);
             IsActive = true;

@@ -18,7 +18,7 @@ namespace BlockPrinter
         public void Rungame()
         {
             //フィールドシステムの初期化処理を呼び出し
-            fieldSystem.Initialize(0, null, OnGameOver);
+            fieldSystem.Initialize(0, FieldController.LastSettings[0], null, OnGameOver);
             fieldSystem.SetState(FieldSystem.State.Active);
         }
 
@@ -43,7 +43,7 @@ namespace BlockPrinter
         public void OnRestart()
         {
             fieldSystem.DiscardInstances();
-            fieldSystem.Initialize(0, null, OnGameOver);
+            fieldSystem.Initialize(0, FieldController.LastSettings[0], null, OnGameOver);
         }
 
         public void LeaveMode()

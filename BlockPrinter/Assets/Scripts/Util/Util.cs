@@ -356,4 +356,21 @@ namespace Util
             return new Bounds2d(b, t);
         }
     }
+
+    public static class CommonInput
+    {
+        public static bool GetKeyDown(Direction Dir)
+        {
+            switch(Dir)
+            {
+                case Direction.None: return false;
+                    case Direction.Left: return Input.GetAxis("Horizontal") < -0.5f || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow);
+                    case Direction.Right: return Input.GetAxis("Horizontal") > +0.5f || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow);
+                case Direction.Up: return Input.GetAxis("Vertical") > +0.5f || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow);
+                case Direction.Down: return Input.GetAxis("Vertical") < -0.5f || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow);
+
+            }
+            return false;
+        }
+    }
 }

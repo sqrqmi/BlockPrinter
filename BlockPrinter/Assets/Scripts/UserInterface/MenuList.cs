@@ -1,4 +1,5 @@
 using System;
+using UnityEditor.Overlays;
 using UnityEngine;
 
 namespace BlockPrinter.UserInterface
@@ -11,11 +12,8 @@ namespace BlockPrinter.UserInterface
         public string OnSelectMethodName;
     }
 
-    public class MenuList : MonoBehaviour
+    public class MenuList : MenuBase
     {
-        public static MenuList RootInstance;
-
-        private MenuList SuperListInstance;
 
         [SerializeField] private MenuElementView MenuElementPrefab;
         [SerializeField] private MenuCursor CursorPrefab;
@@ -24,48 +22,47 @@ namespace BlockPrinter.UserInterface
         [SerializeField] private Util.Direction SortDirection;
         [SerializeField] private MenuElement[] MenuElements;
         [SerializeField] private bool AllowCancel;
+        [SerializeField] private MenuElement OnCancel;
 
         private MenuCursor CursorInstance;
         private MenuElementView[] MenuElementViewInstances;
         private int CurrentSelectingIndex;
-        private bool IsActive;
 
         private void Update()
         {
-            if(!IsActive)
+            if (!IsActive)
             {
                 return;
             }
-            if(Input.GetAxis("Vertical") < -0.5f)
+            if (Util.CommonInput.GetKeyDown(Util.Direction.Down))
             {
                 ChangeSelection(CurrentSelectingIndex + 1);
             }
-            if(Input.GetAxis("Vertical") > +0.5f)
+            if (Util.CommonInput.GetKeyDown(Util.Direction.Up))
             {
                 ChangeSelection(CurrentSelectingIndex - 1);
             }
-            if(AllowCancel && Input.GetKeyDown(KeyCode.Escape))
+            if (AllowCancel && Input.GetKeyDown(KeyCode.Escape))
             {
-                ReturnToSuperList();
+                Cancel();
             }
-            if(Input.GetKeyDown(KeyCode.Return))
+            if (Input.GetKeyDown(KeyCode.Return))
             {
                 Submit();
-                ReturnToSuperList();
             }
 
 
         }
 
-        public void Initialize(MenuList SuperList)
+        public override void Initialize(MenuBase SuperMenu)
         {
-            if(SuperList == null)
+            if (SuperMenu == null)
             {
                 RootInstance = this;
             }
-            SuperListInstance = SuperList;  
+            SuperInstance = SuperMenu;
             MenuElementViewInstances = new MenuElementView[MenuElements.Length];
-            for(int i = 0; i < MenuElements.Length; i++)
+            for (int i = 0; i < MenuElements.Length; i++)
             {
                 MenuElementView NewView = Instantiate(MenuElementPrefab);
                 NewView.transform.SetParent(MenuPivot.transform);
@@ -75,39 +72,35 @@ namespace BlockPrinter.UserInterface
             }
             CursorInstance = Instantiate(CursorPrefab);
             CursorInstance.transform.SetParent(MenuPivot.transform);
+            CursorInstance.Initialize(AlignmentLayout.Transform(Vector2Int.zero));
             CurrentSelectingIndex = 0;
             ChangeSelection(0);
             IsActive = true;
         }
 
-        public void Override(MenuList NewList)
+        public override void ReturnToSuperMenu()
         {
-            NewList.Initialize(this);
-            IsActive = false;
-        }
-
-        public void ReturnToSuperList()
-        {
-            if(SuperListInstance != null)
+            if (SuperInstance != null)
             {
-                SuperListInstance.SwitchActive(true);
+                SuperInstance.SwitchActive(true);
             }
             SwitchActive(false);
             DiscardInstances();
         }
 
-        public void SwitchActive(bool Active)
+        public override void SwitchActive(bool Active)
         {
-            if (IsActive != Active)
+            if (IsActive == Active)
             {
-                IsActive = Active;
-                MenuElementViewInstances[CurrentSelectingIndex].OnSelectionChange(IsActive);
+                return;
             }
+            IsActive = Active;
+            MenuElementViewInstances[CurrentSelectingIndex].OnSelectionChange(IsActive);
         }
 
         public void ChangeSelection(int NewIndex)
         {
-            if(NewIndex < 0 || MenuElements.Length <= NewIndex)
+            if (NewIndex < 0 || MenuElements.Length <= NewIndex)
             {
                 return;
             }
@@ -121,13 +114,20 @@ namespace BlockPrinter.UserInterface
         {
             MenuElements[CurrentSelectingIndex].EventHandlerObject.SendMessage(MenuElements[CurrentSelectingIndex].OnSelectMethodName);
             CursorInstance.OnSubmit();
+            ReturnToSuperMenu();
         }
 
-        public void DiscardInstances()
+        public void Cancel()
         {
-            for(int i = 0; i < MenuElementViewInstances.Length; i++)
+            OnCancel.EventHandlerObject.SendMessage(OnCancel.OnSelectMethodName);
+            ReturnToSuperMenu();
+        }
+
+        public override void DiscardInstances()
+        {
+            for (int i = 0; i < MenuElementViewInstances.Length; i++)
             {
-                if(MenuElementViewInstances[i] != null)
+                if (MenuElementViewInstances[i] != null)
                 {
                     Destroy(MenuElementViewInstances[i].gameObject);
                 }

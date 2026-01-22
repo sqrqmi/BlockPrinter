@@ -25,5 +25,20 @@ namespace Util
         {
             Rend.color = StartColor;
         }
+
+        public static LinearMovement Create(GameObject Obj, Vector3 From, Vector3 To, float Time, InterpolationMode Mode)
+        {
+            LinearMovement NewMovement = Obj.GetComponent<LinearMovement>();
+            if (NewMovement == null)
+            {
+                NewMovement = Obj.AddComponent<LinearMovement>();
+            }
+            NewMovement.From = From;
+            NewMovement.To = To;
+            NewMovement.MoveTime = Time;
+            NewMovement.Mode = Mode;
+            NewMovement.StartAnimation();
+            return NewMovement;
+        }
     }
 }

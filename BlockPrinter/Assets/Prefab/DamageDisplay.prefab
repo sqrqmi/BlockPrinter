@@ -138,7 +138,7 @@ MonoBehaviour:
     Spacing: 0
     LineHeight: 0
   FontColor: {r: 1, g: 1, b: 1, a: 1}
-  HorizontalAlignment: 0
+  HorizontalAlignment: 0.003
   VerticalAlignment: 0
   IsDisplayOnStart: 1
 --- !u!1 &2563336501234172103

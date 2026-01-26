@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace BlockPrinter
+namespace BlockPrinter.UserInterface
 {
     public class TransitionEnter : MonoBehaviour
     {

@@ -130,7 +130,7 @@ namespace BlockPrinter
 
         public void LeaveMode()
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("TitleScene");
+            UserInterface.SceneTransitionManager.LoadScene("TitleScene");
 
         }
     }

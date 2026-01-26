@@ -49,7 +49,7 @@ namespace BlockPrinter
                {
                     new FieldController() { Mode = FieldController.UseMode.Player, PlayerKeyConfig = new KeyConfig() { LeftKey = KeyCode.A, RightKey = KeyCode.D } },
                };
-            SceneManager.LoadScene("GameMain");
+            UserInterface.SceneTransitionManager.LoadScene("GameMain");
         }
 
         public void StartVersusCPUMode()
@@ -69,7 +69,7 @@ namespace BlockPrinter
                     new FieldController() { Mode = FieldController.UseMode.Player, PlayerKeyConfig = new KeyConfig() { LeftKey = KeyCode.A, RightKey = KeyCode.D } },
                     new FieldController() { Mode = FieldController.UseMode.CPU, CPUConfig = new CPUProperty() { Prop = new CPUCharacteristics() { Level = CPULevel } } }
                 };
-            SceneManager.LoadScene("BattleModeScene");
+            UserInterface.SceneTransitionManager.LoadScene("BattleModeScene");
         }
 
         public void StartVersusPlayerMode()
@@ -79,7 +79,7 @@ namespace BlockPrinter
                     new FieldController() { Mode = FieldController.UseMode.Player, PlayerKeyConfig = new KeyConfig() { LeftKey = KeyCode.A, RightKey = KeyCode.D } },
                     new FieldController() { Mode = FieldController.UseMode.Player, PlayerKeyConfig = new KeyConfig() { LeftKey = KeyCode.LeftArrow, RightKey = KeyCode.RightArrow } },
             };
-            SceneManager.LoadScene("BattleModeScene");
+            UserInterface.SceneTransitionManager.LoadScene("BattleModeScene");
         }
 
         public void StartFourPlayerMode()
@@ -92,7 +92,7 @@ namespace BlockPrinter
                     new FieldController() { Mode = FieldController.UseMode.Player, PlayerKeyConfig = new KeyConfig() { LeftKey = KeyCode.LeftArrow, RightKey = KeyCode.RightArrow } },
                     new FieldController() { Mode = FieldController.UseMode.Player, PlayerKeyConfig = new KeyConfig() { LeftKey = KeyCode.Keypad4, RightKey = KeyCode.Keypad6 } },
             };
-            SceneManager.LoadScene("FourPlayerModeScene");
+            UserInterface.SceneTransitionManager.LoadScene("FourPlayerModeScene");
         }
 
         public void ExitApplication()

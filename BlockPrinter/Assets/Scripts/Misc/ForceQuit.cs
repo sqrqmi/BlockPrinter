@@ -10,7 +10,7 @@ namespace BlockPrinter.Misc
         {
             if(Input.GetKeyDown(KeyCode.Escape))
             {
-                SceneManager.LoadScene("TitleScene");
+                Application.Quit();
             }
         }
     }

@@ -48,7 +48,7 @@ namespace BlockPrinter
 
         public void LeaveMode()
         {
-            SceneManager.LoadScene("TitleScene");
+            UserInterface.SceneTransitionManager.LoadScene("TitleScene");
 
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,7 +15,7 @@ namespace BlockPrinter.UserInterface
         {
             DontDestroyOnLoad(this.gameObject);
             {
-                SceneTransitionEnter EnterAnimation = GameObject.Find("EnterAnimation").GetComponent<SceneTransitionEnter>();
+                TransitionEnter EnterAnimation = GameObject.Find("TransitionEnter").GetComponent<TransitionEnter>();
                 if (EnterAnimation != null)
                 {
                     EnterAnimation.StartAnimation();
@@ -23,8 +24,10 @@ namespace BlockPrinter.UserInterface
             }
             SceneManager.LoadScene(SceneName);
             yield return null;
+            SceneManager.MoveGameObjectToScene(this.gameObject, SceneManager.GetActiveScene());
+
             {
-                SceneTransitionExit ExitAnimation = GameObject.Find("ExitAnimation").GetComponent<SceneTransitionExit>();
+                TransitionExit ExitAnimation = GameObject.Find("TransitionExit").GetComponent<TransitionExit>();
                 if (ExitAnimation != null)
                 {
                     ExitAnimation.StartAnimation();

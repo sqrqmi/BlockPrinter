@@ -78,6 +78,7 @@
     <Compile Include="Assets\Scripts\Effect\RainbowEffects.cs" />
     <Compile Include="Assets\Scripts\UserInterface\MenuElementView.cs" />
     <Compile Include="Assets\Scripts\CPUProperty.cs" />
+    <Compile Include="Assets\Scripts\UserInterface\SceneTransitionManager.cs" />
     <Compile Include="Assets\Scripts\UserInterface\ValueSelector.cs" />
     <Compile Include="Assets\Scripts\RecordDisplay.cs" />
     <Compile Include="Assets\Scripts\UserInterface\MenuList.cs" />

@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/BattleModeScene.unity
     guid: 146f176b95b9f9446b4f79f727cb8564
+  - enabled: 1
+    path: Assets/Scenes/FourPlayerModeScene.unity
+    guid: 386fca662cb3e6d4e89e656cb3a74a15
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

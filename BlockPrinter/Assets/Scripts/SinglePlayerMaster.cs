@@ -44,6 +44,8 @@ namespace BlockPrinter
         {
             fieldSystem.DiscardInstances();
             fieldSystem.Initialize(0, FieldController.LastSettings[0], null, OnGameOver);
+            fieldSystem.SetState(FieldSystem.State.Active);
+
         }
 
         public void LeaveMode()
